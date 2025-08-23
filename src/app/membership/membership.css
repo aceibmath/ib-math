@@ -1,0 +1,203 @@
+:root {
+  --blue-light: #e6f4fc; /* albastru deschis (chip) */
+  --blue-mid:   #5fa8d3; /* accent */
+  --blue-dark:  #35658a; /* text */
+  --red-accent: #e11d48; /* ca Premium din header */
+}
+
+/* ===== Page scaffold ===== */
+.membership-page {
+  width: 100%;
+  padding-bottom: 40px;
+  background: #f6fbff;
+  font-weight: 400; /* nimic bold pe pagină */
+}
+
+/* ===== Hero ===== */
+.hero-blue {
+  width: 100%;
+  background: linear-gradient(180deg, var(--blue-light) 0%, var(--blue-mid) 100%);
+  color: #ffffff;
+  padding: 24px 16px;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.hero-inner { max-width: 1240px; margin: 0 auto; }
+
+.hero-title {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.25;
+  font-weight: 400; /* normal */
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+.hero-title .ace-red { color: var(--red-accent); font-weight: 400; }
+
+/* ===== Grid ===== */
+.membership-grid {
+  max-width: 1240px;
+  margin: 20px auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.9fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .membership-grid { grid-template-columns: 1fr 1fr; }
+  .checkout-card { position: static; top: auto; }
+}
+
+@media (max-width: 820px) { .membership-grid { grid-template-columns: 1fr; } }
+
+/* ===== Course card ===== */
+.course-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid var(--blue-light);
+  box-shadow: 0 6px 16px rgba(70, 130, 180, 0.08);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.05s ease;
+}
+
+.course-card.active {
+  outline: 2px solid var(--blue-mid);
+  box-shadow: 0 10px 24px rgba(70, 130, 180, 0.2);
+}
+
+/* Topbar */
+.course-topbar {
+  background: var(--blue-light);
+  border-bottom: 1px solid var(--blue-mid);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.fake-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--blue-dark);
+  font-weight: 400;
+}
+
+.fake-radio input[type="checkbox"] { position: absolute; opacity: 0; pointer-events: none; }
+
+.fake-radio .dot {
+  width: 18px; height: 18px; border-radius: 999px;
+  border: 2px solid var(--blue-mid);
+  display: inline-block; position: relative; flex-shrink: 0;
+}
+
+.fake-radio input[type="checkbox"]:checked + .dot { border-color: var(--blue-dark); }
+.fake-radio input[type="checkbox"]:checked + .dot::after {
+  content: ""; position: absolute; inset: 3px; border-radius: 999px; background: var(--blue-mid);
+}
+
+.course-name { font-size: 15px; font-weight: 400; }
+
+/* Price */
+.course-header { padding: 16px 18px 8px; text-align: center; }
+
+.course-price-line { display: inline-flex; align-items: baseline; gap: 8px; }
+
+.course-price-line .price { font-size: 22px; font-weight: 400; color: #ef4444; }
+.course-price-line .per   { font-weight: 400; color: #6b7280; }
+
+/* Chips */
+.course-features { padding: 12px 18px 20px; }
+
+.course-features h3 { font-size: 15px; font-weight: 400; color: #111827; margin: 0 0 10px 0; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
+
+.chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--blue-light);
+  border: 1px solid var(--blue-mid);
+  font-weight: 400; font-size: 13px; color: var(--blue-dark);
+}
+
+/* ===== Checkout ===== */
+.checkout-card {
+  position: sticky; top: 88px; align-self: start;
+  background: #ffffff; border: 1px solid var(--blue-light);
+  border-radius: 16px; box-shadow: 0 8px 20px rgba(70, 130, 180, 0.15);
+}
+
+.checkout-inner { padding: 18px; }
+
+/* rezumat pliabil */
+.summary-row {
+  width: 100%; appearance: none; background: transparent; border: none;
+  padding: 6px 0 10px; display: flex; justify-content: space-between; align-items: center;
+  font-weight: 400; color: #0f172a; cursor: pointer;
+}
+
+.summary-left { display: inline-flex; align-items: center; gap: 8px; }
+
+/* Săgeată sus/jos */
+.chev {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid #333;
+  border-bottom: 2px solid #333;
+  transform: rotate(45deg); /* jos */
+  transition: transform 0.2s ease;
+  margin-left: 6px;
+}
+
+.chev.up {
+  transform: rotate(-135deg); /* sus */
+}
+
+.panel.open { display: block; }
+.panel.closed { display: none; }
+
+.checkout-empty { margin: 6px 0 12px 0; color: #6b7280; font-weight: 400; }
+
+.checkout-list { list-style: none; margin: 0 0 8px 0; padding: 0; display: grid; gap: 12px; }
+
+.checkout-item {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  padding: 10px 0; border-bottom: 1px solid #eef2f7;
+}
+
+.ci-main { display: grid; }
+.ci-title { font-weight: 400; color: #111827; }
+.ci-sub   { font-size: 12.5px; font-weight: 400; color: #6b7280; }
+
+.ci-right { font-weight: 400; color: #0f172a; }
+.ci-price { font-weight: 400; color: #0f172a; }
+
+.checkout-total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 12px 0 16px; border-top: 1px solid #e5e7eb; margin-top: 4px;
+}
+
+.checkout-total span:first-child { font-weight: 400; color: #111827; }
+.total-amount { font-weight: 400; font-size: 22px; }
+
+/* Buton mare cu total în etichetă — text negru, fără bold */
+.checkout-btn {
+  width: 100%; border: none; border-radius: 999px;
+  padding: 16px 20px; font-weight: 400; font-size: 18px;
+  background: var(--blue-mid); color: #0b0f19;
+  cursor: pointer; transition: transform 0.04s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 6px 16px rgba(70, 130, 180, 0.35);
+}
+
+.checkout-btn.large { font-size: 18px; }
+.checkout-btn:hover { transform: translateY(-1px); }
+.checkout-btn:disabled,
+.checkout-btn[aria-disabled="true"] { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
+
+.error { margin: 6px 0 10px; color: #b91c1c; font-weight: 400; font-size: 13px; }
+.note  { margin-top: 12px; font-size: 12.5px; color: #6b7280; font-weight: 400; }

@@ -1,0 +1,60 @@
+/* ============================
+   Import Bootstrap CSS (global)
+   ============================ */
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+/* ============================
+   Linkuri
+   ============================ */
+
+/* Elimină sublinierea implicită pe toate linkurile */
+a {
+  text-decoration: none;
+}
+
+/* Elimină outline-ul la focus (vom controla manual stilul de focus) */
+a:focus,
+button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ============================
+   Body & layout general
+   ============================ */
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #fff;
+  color: #000;
+}
+
+/* Fix pentru header (să rămână deasupra conținutului) */
+header {
+  z-index: 1000;
+}
+
+/* ============================
+   Dropdown personalizat
+   ============================ */
+.custom-dropdown-link {
+  display: block !important;              /* fiecare link pe rând separat */
+  width: 100% !important;                  /* ocupă toată lățimea containerului dropdown */
+  text-align: center !important;           /* text centrat */
+  padding: 6px 12px !important;            /* spațiere interioară */
+  border-radius: 50px !important;          /* colțuri rotunjite */
+  text-decoration: none !important;        /* fără subliniere */
+  color: inherit !important;               /* păstrează culoarea textului */
+  background-color: transparent !important;/* fără fundal implicit */
+  transition: background-color 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+/* Hover / Focus / Active - gri rotunjit */
+.custom-dropdown-link:hover,
+.custom-dropdown-link:focus,
+.custom-dropdown-link:active {
+  background-color: #f5f5f5 !important;    /* gri la hover */
+  border-radius: 50px !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}

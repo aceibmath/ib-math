@@ -1,10 +1,13 @@
+// src/app/verify/page.js
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-export default function VerifyPage() {
+export const dynamic = "force-dynamic";
+
+function VerifyContent() {
   const auth = getAuth();
   const router = useRouter();
   const search = useSearchParams();
@@ -28,6 +31,7 @@ export default function VerifyPage() {
       await requestCode();
     });
     return () => unsub();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, router]);
 
   // cronometru cooldown
@@ -131,10 +135,19 @@ export default function VerifyPage() {
             {error === "expired" && "Cod expirat – trimite din nou"}
             {error === "locked" && "Prea multe încercări – așteaptă"}
             {error === "too_many_resends" && "Limită de resend atinsă"}
-            {["send_failed", "cooldown", "missing_code", "code_not_found", "internal"].includes(error) && "A apărut o eroare"}
+            {["send_failed", "cooldown", "missing_code", "code_not_found", "internal"].includes(error) &&
+              "A apărut o eroare"}
           </span>
         )}
       </div>
     </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<div />}>
+      <VerifyContent />
+    </Suspense>
   );
 }

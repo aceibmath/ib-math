@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-export default function LoginPage() {
+export const dynamic = "force-dynamic";
+
+function LoginContent() {
   const { user, loginWithGoogle, loginWithEmail, logout } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -40,7 +42,6 @@ export default function LoginPage() {
     }
   };
 
-  // ✅ după ce user-ul e logat și email-ul e verificat → mergem la /verify (sau ?next=)
   useEffect(() => {
     if (!user) return;
     if (!user.emailVerified) {
@@ -57,10 +58,7 @@ export default function LoginPage() {
       className="container d-flex justify-content-center align-items-start"
       style={{ minHeight: "100vh", marginTop: "30px" }}
     >
-      <div
-        className="card shadow p-4"
-        style={{ maxWidth: "400px", width: "100%" }}
-      >
+      <div className="card shadow p-4" style={{ maxWidth: "400px", width: "100%" }}>
         <h3 className="text-center mb-4">Login</h3>
 
         <button
@@ -95,9 +93,7 @@ export default function LoginPage() {
           <div className="mb-3">
             <input
               type="text"
-              className={`form-control ${
-                submitted && errors.email ? "border border-danger" : ""
-              }`}
+              className={`form-control ${submitted && errors.email ? "border border-danger" : ""}`}
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -112,9 +108,7 @@ export default function LoginPage() {
             <div className="position-relative">
               <input
                 type={showPassword ? "text" : "password"}
-                className={`form-control pe-5 ${
-                  submitted && errors.password ? "border border-danger" : ""
-                }`}
+                className={`form-control pe-5 ${submitted && errors.password ? "border border-danger" : ""}`}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -176,5 +170,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div />}>
+      <LoginContent />
+    </Suspense>
   );
 }

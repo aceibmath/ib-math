@@ -1,7 +1,7 @@
-// src/app/api/create-checkout-session/route.js
+// src/app/checkout/page.js
 import Stripe from "stripe";
 import { headers as nextHeaders, cookies as nextCookies } from "next/headers";
-import { admin, adminDb } from "../../../lib/firebaseAdmin.js";
+import { adminAuth, adminDb } from "@/lib/firebaseAdmin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -36,8 +36,8 @@ async function getUidAndEmail() {
   if (!token) return { uid: null, email: null };
 
   try {
-    const decoded = await admin.auth().verifyIdToken(token);
-    const user = await admin.auth().getUser(decoded.uid).catch(() => null);
+    const decoded = await adminAuth.verifyIdToken(token);
+    const user = await adminAuth.getUser(decoded.uid).catch(() => null);
     return { uid: decoded.uid, email: user?.email || null };
   } catch {
     return { uid: null, email: null };
@@ -109,7 +109,6 @@ export async function POST(req) {
         cancelUrl || process.env.STRIPE_CANCEL_URL || `${origin}/cancel`,
     });
 
-    // compatibil atât cu redirectToCheckout (sessionId), cât și cu redirect simplu (url)
     return new Response(
       JSON.stringify({ id: session.id, sessionId: session.id, url: session.url }),
       { status: 200, headers: { "Content-Type": "application/json" } }

@@ -1,7 +1,7 @@
-// src/app/api/create-checkout-session/route.js
+// src/app/api/stripe/create-portal-session/route.js
 import Stripe from "stripe";
 import { headers as nextHeaders, cookies as nextCookies } from "next/headers";
-import { admin, adminDb } from "../../../lib/firebaseAdmin.js";
+import { adminAuth, adminDb } from "@/lib/firebaseAdmin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,8 +18,8 @@ async function getUidAndEmail() {
   if (!token) return { uid: null, email: null };
 
   try {
-    const decoded = await admin.auth().verifyIdToken(token);
-    const user = await admin.auth().getUser(decoded.uid).catch(() => null);
+    const decoded = await adminAuth.verifyIdToken(token);
+    const user = await adminAuth.getUser(decoded.uid).catch(() => null);
     return { uid: decoded.uid, email: user?.email || null };
   } catch {
     return { uid: null, email: null };
@@ -69,15 +69,12 @@ export async function POST(req) {
       customer: customerId,
       line_items: [{ price: priceId, quantity }],
       allow_promotion_codes: true,
-      // hosted invoice (exact layout Stripe)
       invoice_creation: { enabled: true },
       metadata: { uid, productKey, from: "web" },
       client_reference_id: uid,
-      // ✅ după plată mergem direct în Billing + marcam success=1
       success_url:
         successUrl ||
         `${origin}/account/billing?success=1&cs={CHECKOUT_SESSION_ID}`,
-      // opțional: anulare în Membership
       cancel_url: cancelUrl || `${origin}/membership?canceled=1`,
     });
 

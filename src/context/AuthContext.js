@@ -81,9 +81,22 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // 🔹 LOGOUT
+  // 🔹 LOGOUT – deloghează, curăță cookie-urile MFA pe server, apoi redirect în HOME
   const logout = async () => {
-    await signOut(auth);
+    try {
+      await signOut(auth);
+    } finally {
+      try {
+        await fetch("/api/session/clear", {
+          method: "POST",
+          credentials: "include",
+        });
+      } catch (_) {
+        // ignorăm erorile de clear
+      }
+      // navigare HARD la homepage, indiferent de pagina curentă
+      window.location.href = "/";
+    }
   };
 
   // 🔹 LISTEN PENTRU USER LOGIN

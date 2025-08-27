@@ -1,12 +1,12 @@
-// src/app/api/mfa/email/request/route.js 
+// src/app/api/mfa/email/request/route.js
 export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
-import path from "path";
+import path from "path"; // (rămas aici dacă vei dori CID în viitor)
 import { adminAuth, adminDb, FieldValue } from "@/lib/firebaseAdmin";
 import { generateOTP } from "@/lib/otp";
 import { otpTemplate } from "@/emails/otpTemplate";
+import { sendMail } from "@/lib/mailer";
 
 // Config din ENV
 const TTL_MIN = Number(process.env.MFA_OTP_TTL_MINUTES || 10);
@@ -45,7 +45,7 @@ export async function POST(req) {
     const email = decoded.email;
     if (!email) return NextResponse.json({ error: "no_email" }, { status: 400 });
 
-    // 2) Cooldown + cap de retransmiteri (per-uid, din mfa_codes)
+    // 2) Cooldown + cap de retransmiteri
     const docRef = adminDb.collection("mfa_codes").doc(uid);
     const snap = await docRef.get();
     const now = Date.now();
@@ -61,14 +61,14 @@ export async function POST(req) {
       }
     }
 
-    // 3) 🔒 Rate-limit suplimentar: per-uid + per-ip (fereastră 15 min)
+    // 3) Rate-limit suplimentar: per-uid + per-ip
     const ip =
       req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
       req.headers.get("x-real-ip") ||
       "unknown";
     await Promise.all([
       checkRateLimit(uid, { limit: 5, windowMinutes: 15 }),
-      checkRateLimit(ip, { limit: 10, windowMinutes: 15 }), // puțin mai permisiv pe IP
+      checkRateLimit(ip, { limit: 10, windowMinutes: 15 }),
     ]);
 
     // 4) Generează OTP și salvează
@@ -90,45 +90,16 @@ export async function POST(req) {
       { merge: true }
     );
 
-    // 5) Nodemailer (Brevo SMTP)
-    const allowSelfSigned = String(process.env.SMTP_ALLOW_SELF_SIGNED || "").toLowerCase() === "true";
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT || 587),
-      secure: String(process.env.SMTP_SECURE || "false").toLowerCase() === "true",
-      auth: process.env.SMTP_USER ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } : undefined,
-      tls: allowSelfSigned ? { rejectUnauthorized: false } : undefined, // doar în dev
-      connectionTimeout: 15_000,
-      greetingTimeout: 15_000,
-      socketTimeout: 30_000,
-    });
-
-    const from = process.env.MFA_EMAIL_FROM || "AceIBMath <noreply@aceibmath.com>";
-
-    // 6) Template cu logo (URL absolut în prod, CID în dev)
+    // 5) Template + trimitere email prin helperul comun
     const { subject, text, html } = otpTemplate({ code, ttlMinutes: TTL_MIN });
+    const from = process.env.MFA_EMAIL_FROM || `AceIBMath <${process.env.SMTP_USER || "noreply@aceibmath.com"}>`;
 
-    const inProd =
-      process.env.NODE_ENV === "production" &&
-      /^https?:\/\//.test(String(process.env.NEXT_PUBLIC_SITE_URL)) &&
-      !/localhost|127\.0\.0\.1/i.test(String(process.env.NEXT_PUBLIC_SITE_URL));
-
-    let mailHtml = html;
-    const attachments = [];
-
-    if (!inProd) {
-      const logoPath = path.join(process.cwd(), "public", "logo-email.png");
-      attachments.push({ filename: "logo-email.png", path: logoPath, cid: "logoEmail" });
-      mailHtml = html.replace(/src="[^"]*logo-email\.png"/i, 'src="cid:logoEmail"');
-    }
-
-    await transporter.sendMail({
+    await sendMail({
       from,
       to: email,
       subject,
       text,
-      html: mailHtml,
-      attachments: attachments.length ? attachments : undefined,
+      html, // logo folosit din CDN/site public → nu avem nevoie de CID
     });
 
     return NextResponse.json({ ok: true, expiresAt });

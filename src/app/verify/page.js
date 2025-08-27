@@ -1,8 +1,7 @@
-// src/app/verify/page.js
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 export const dynamic = "force-dynamic";
@@ -10,9 +9,6 @@ export const dynamic = "force-dynamic";
 function VerifyContent() {
   const auth = getAuth();
   const router = useRouter();
-  const search = useSearchParams();
-
-  const nextPath = search.get("next") || "/account";
 
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle"); // idle | sending | sent | verifying | verified
@@ -20,7 +16,6 @@ function VerifyContent() {
   const [code, setCode] = useState("");
   const [cooldown, setCooldown] = useState(0);
 
-  // așteaptă sesiunea Firebase, apoi cere codul
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
       if (!u) {
@@ -34,7 +29,6 @@ function VerifyContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, router]);
 
-  // cronometru cooldown
   useEffect(() => {
     if (cooldown <= 0) return;
     const t = setTimeout(() => setCooldown((c) => c - 1), 1000);
@@ -81,7 +75,7 @@ function VerifyContent() {
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "invalid");
       setStatus("verified");
-      router.replace(nextPath);
+      router.replace("/"); // <- după succes mergem în HOME
     } catch (e) {
       setStatus("idle");
       setError(e.message || "invalid");
@@ -112,21 +106,13 @@ function VerifyContent() {
             marginBottom: 12,
           }}
         />
-        <button
-          type="submit"
-          disabled={status === "verifying" || code.length !== 6}
-          style={{ padding: "10px 14px" }}
-        >
+        <button type="submit" disabled={status === "verifying" || code.length !== 6} style={{ padding: "10px 14px" }}>
           {status === "verifying" ? "Verific…" : "Verifică codul"}
         </button>
       </form>
 
       <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-        <button
-          onClick={requestCode}
-          disabled={cooldown > 0 || status === "sending"}
-          style={{ padding: "8px 12px" }}
-        >
+        <button onClick={requestCode} disabled={cooldown > 0 || status === "sending"} style={{ padding: "8px 12px" }}>
           {cooldown > 0 ? `Trimite din nou (${cooldown}s)` : "Trimite din nou"}
         </button>
         {!!error && (
@@ -134,9 +120,8 @@ function VerifyContent() {
             {error === "invalid" && "Cod invalid"}
             {error === "expired" && "Cod expirat – trimite din nou"}
             {error === "locked" && "Prea multe încercări – așteaptă"}
-            {error === "too_many_resends" && "Limită de resend atinsă"}
-            {["send_failed", "cooldown", "missing_code", "code_not_found", "internal"].includes(error) &&
-              "A apărut o eroare"}
+            {error === "too_many_resends" && "Limită de retrimiteri atinsă"}
+            {["send_failed", "cooldown", "missing_code", "code_not_found", "internal"].includes(error) && "A apărut o eroare"}
           </span>
         )}
       </div>

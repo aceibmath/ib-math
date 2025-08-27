@@ -1,116 +1,82 @@
 "use client";
 import { useEffect, useState } from "react";
+import { getAuth } from "firebase/auth";
 
 export default function SecurityTab() {
-  const [phase, setPhase] = useState("idle");      // idle | requested | verified
-  const [code, setCode] = useState("");
-  const [error, setError] = useState("");
-  const [countdown, setCountdown] = useState(0);   // sec pentru resend
+  const [loading, setLoading] = useState(true);
+  const [enabled, setEnabled] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState("");
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch("/api/mfa/email/status", { cache: "no-store" });
-        const data = await res.json();
-        setPhase(data.verified ? "verified" : "idle");
+        const r = await fetch("/api/mfa/email/status", { cache: "no-store" });
+        const j = await r.json();
+        setEnabled(!!j?.enabled);
       } catch {}
+      setLoading(false);
     })();
   }, []);
 
-  useEffect(() => {
-    if (!countdown) return;
-    const t = setInterval(() => setCountdown((s) => (s > 0 ? s - 1 : 0)), 1000);
-    return () => clearInterval(t);
-  }, [countdown]);
-
-  const onRequest = async () => {
-    setError("");
+  async function toggle2fa(nextValue) {
+    setSaving(true);
+    setErr("");
     try {
-      const res = await fetch("/api/mfa/email/request", { method: "POST" });
-      if (!res.ok) {
-        const d = await res.json().catch(() => ({}));
-        throw new Error(d?.message || "Request failed");
-      }
-      setPhase("requested");
-      setCountdown(60);
-    } catch (e) {
-      setError(e.message);
-    }
-  };
-
-  const onVerify = async (e) => {
-    e.preventDefault();
-    setError("");
-    try {
-      const res = await fetch("/api/mfa/email/verify", {
+      const u = getAuth().currentUser;
+      if (!u) throw new Error("Not authenticated");
+      const t = await u.getIdToken();
+      const r = await fetch("/api/mfa/settings", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${t}` },
+        body: JSON.stringify({ enabled: nextValue }),
+        credentials: "include",       // IMPORTANT: aplică Set-Cookie (mfa_required)
       });
-      if (!res.ok) {
-        const d = await res.json().catch(() => ({}));
-        throw new Error(d?.message || "Invalid code");
-      }
-      setPhase("verified");
+      const j = await r.json();
+      if (!r.ok || !j?.ok) throw new Error(j?.error || "save_failed");
+      setEnabled(nextValue);
     } catch (e) {
-      setError(e.message);
+      setErr("Nu am putut salva setarea. Încearcă din nou.");
+    } finally {
+      setSaving(false);
     }
-  };
-
-  const onResend = () => countdown === 0 && onRequest();
+  }
 
   return (
     <div className="card shadow-sm">
       <div className="card-body">
         <h5 className="card-title mb-2">Password &amp; Security</h5>
-        <p className="text-muted mb-4">
-          Verifică un cod trimis pe e-mail pentru un plus de securitate pe acest dispozitiv.
+        <p className="text-muted mb-3">
+          Verificare în doi pași printr-un cod de 6 cifre trimis pe e-mail.
         </p>
 
-        {phase === "verified" ? (
-          <div className="alert alert-success mb-0">
-            Two-factor via e-mail este activ pe acest dispozitiv.
-          </div>
+        {loading ? (
+          <div className="text-muted">Loading…</div>
         ) : (
           <>
-            <div className="d-flex gap-2 align-items-center mb-3">
-              <button className="btn btn-primary" onClick={onRequest} disabled={phase === "requested"}>
-                {phase === "requested" ? "Cod trimis" : "Trimite codul"}
-              </button>
-
-              {phase === "requested" && (
-                <button className="btn btn-outline-secondary" onClick={onResend} disabled={countdown > 0}>
-                  {countdown > 0 ? `Retrimite în ${countdown}s` : "Retrimite"}
-                </button>
-              )}
-            </div>
-
-            {phase === "requested" && (
-              <form className="d-flex gap-2" onSubmit={onVerify}>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  className="form-control"
-                  placeholder="Cod din 6 cifre"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                  required
-                />
-                <button className="btn btn-success" type="submit" disabled={code.length !== 6}>
-                  Verifică
-                </button>
-              </form>
+            {enabled ? (
+              <div className="alert alert-success">Email 2FA este activat.</div>
+            ) : (
+              <div className="alert alert-secondary">Email 2FA este dezactivat.</div>
             )}
 
-            {error && <div className="alert alert-danger mt-3 mb-0">{error}</div>}
+            <button
+              className={`btn ${enabled ? "btn-outline-danger" : "btn-primary"}`}
+              onClick={() => toggle2fa(!enabled)}
+              disabled={saving}
+            >
+              {enabled ? "Dezactivează 2FA" : "Activează 2FA"}
+            </button>
+
+            {enabled && (
+              <p className="text-muted mt-3 mb-0">
+                Data viitoare când te loghezi, vei primi un cod pe e-mail și vei intra după verificare.
+              </p>
+            )}
+
+            {err && <div className="alert alert-danger mt-3 mb-0">{err}</div>}
           </>
         )}
-
-        <hr className="my-4" />
-        <small className="text-muted">
-          Codul expiră în 10 minute. Verifică și folderul Spam/Promotions dacă nu îl primești.
-        </small>
       </div>
     </div>
   );

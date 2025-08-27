@@ -42,6 +42,7 @@ function LoginContent() {
     }
   };
 
+  // După autentificare: sincronizăm politica și decidem explicit unde mergem
   useEffect(() => {
     if (!user) return;
     if (!user.emailVerified) {
@@ -49,8 +50,37 @@ function LoginContent() {
       logout();
       return;
     }
-    const next = searchParams.get("next") || "/verify";
-    router.replace(next);
+
+    (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const r = await fetch("/api/session/sync", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${idToken}` },
+          credentials: "include",     // aplică Set-Cookie
+          cache: "no-store",
+        });
+
+        let mustMfa = false;
+        try {
+          const j = await r.json();
+          mustMfa = !!j?.mfaRequired; // <- folosim JSON-ul, nu așteptăm cookie-urile
+        } catch {
+          mustMfa = false;
+        }
+
+        if (mustMfa) {
+          // mergem DIRECT la /verify când 2FA e ON
+          window.location.href = "/verify";
+          return;
+        }
+      } catch {
+        // dacă sync eșuează, cădem pe fluxul normal și middleware va decide
+      }
+
+      // 2FA OFF -> mergem în homepage
+      window.location.href = "/";
+    })();
   }, [user, logout, router, searchParams]);
 
   return (

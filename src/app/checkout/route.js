@@ -1,4 +1,4 @@
-// src/app/checkout/page.js
+// src/app/checkout/route.js
 import Stripe from "stripe";
 import { headers as nextHeaders, cookies as nextCookies } from "next/headers";
 import { adminAuth, adminDb } from "@/lib/firebaseAdmin";

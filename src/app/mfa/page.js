@@ -1,114 +1,158 @@
+// src/app/mfa/page.js
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
 
-export default function MfaPage() {
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+export const dynamic = "force-dynamic"; // nu prerendera static /mfa
+
+function MFAPageInner() {
   const router = useRouter();
   const search = useSearchParams();
-  const nextUrl = search.get("next") || "/account";
+  const nextPath = search.get("next") || "/";
 
-  const [statusMsg, setStatusMsg] = useState("");
-  const [otp, setOtp] = useState("");
-  const [loadingReq, setLoadingReq] = useState(false);
-  const [loadingVerify, setLoadingVerify] = useState(false);
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "verifying" | "verified">("idle");
+  const [error, setError] = useState("");
   const [cooldown, setCooldown] = useState(0);
-  const cooldownRef = useRef(null);
 
+  // La încărcare: asigură user + cere codul
+  useEffect(() => {
+    const auth = getAuth();
+    const unsub = onAuthStateChanged(auth, async (u) => {
+      if (!u) {
+        router.replace(`/login?next=${encodeURIComponent("/mfa")}`);
+        return;
+      }
+      setEmail(u.email || "");
+      await requestCode();
+    });
+    return () => unsub();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
+
+  // cronometru pentru resend
   useEffect(() => {
     if (cooldown <= 0) return;
-    cooldownRef.current = setInterval(() => {
-      setCooldown((c) => {
-        if (c <= 1) {
-          clearInterval(cooldownRef.current);
-          return 0;
-        }
-        return c - 1;
-      });
-    }, 1000);
-    return () => clearInterval(cooldownRef.current);
+    const t = setTimeout(() => setCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
   }, [cooldown]);
 
-  async function requestOtp() {
+  async function authHeader() {
+    const auth = getAuth();
+    const u = auth.currentUser;
+    if (!u) return {};
+    const idToken = await u.getIdToken();
+    return { Authorization: `Bearer ${idToken}` };
+  }
+
+  async function requestCode() {
+    setError("");
+    setStatus("sending");
     try {
-      setLoadingReq(true);
-      setStatusMsg("Trimit cererea...");
-      const res = await fetch("/api/mfa/request", { method: "POST" });
-      const body = await res.json().catch(() => ({}));
-      if (!res.ok || body?.ok !== true) {
-        throw new Error(body?.error || "Cererea OTP a eșuat");
+      const headers = await authHeader();
+      const res = await fetch("/api/mfa/email/request", { method: "POST", headers });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (data?.error === "cooldown") setCooldown(Number(data.retryAfter || 30));
+        setStatus("idle");
+        setError(data?.error || "send_failed");
+        return;
       }
-      setStatusMsg("OTP trimis pe email. Verifică inbox (și Spam).");
-      // pornește cooldown (din env ai MFA_RESEND_COOLDOWN_SECONDS; hardcode 60 ca fallback)
-      setCooldown(60);
+      setStatus("sent");
+      setCooldown(30);
     } catch (e) {
-      setStatusMsg(`Eroare: ${e.message}`);
-    } finally {
-      setLoadingReq(false);
+      setStatus("idle");
+      setError("send_failed");
     }
   }
 
-  async function verifyOtp(e) {
+  async function verifyCode(e) {
     e.preventDefault();
+    setError("");
+    setStatus("verifying");
     try {
-      if (!/^\d{6}$/.test(otp)) {
-        setStatusMsg("Codul trebuie să aibă exact 6 cifre.");
-        return;
-      }
-      setLoadingVerify(true);
-      setStatusMsg("Verific codul...");
-      const res = await fetch("/api/mfa/verify", {
+      const headers = await authHeader();
+      const res = await fetch("/api/mfa/email/verify", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ otp }),
+        headers: { ...headers, "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
       });
-      const body = await res.json().catch(() => ({}));
-      if (!res.ok || body?.ok !== true) {
-        throw new Error(body?.error || "Cod greșit sau expirat.");
-      }
-      setStatusMsg("Verificat! Te redirecționez...");
-      // Cookie-ul HttpOnly 'mfa' e setat de server => navigăm mai departe
-      router.replace(nextUrl);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || "invalid");
+      setStatus("verified");
+      router.replace(nextPath);
     } catch (e) {
-      setStatusMsg(`Eroare: ${e.message}`);
-    } finally {
-      setLoadingVerify(false);
+      setStatus("idle");
+      setError((e && e.message) || "invalid");
     }
   }
 
   return (
-    <div className="container py-5" style={{ maxWidth: 520 }}>
-      <h1 className="mb-4">Autentificare în 2 pași</h1>
-      <p className="text-muted">
-        Ți-am trimis un cod de 6 cifre pe email. Introdu-l mai jos pentru a continua.
+    <div style={{ maxWidth: 480, margin: "40px auto", padding: 16, fontFamily: "system-ui, Arial" }}>
+      <h3 style={{ marginBottom: 12 }}>Verificare în 2 pași</h3>
+      <p style={{ color: "#666", marginBottom: 16 }}>
+        Am trimis un cod la <b>{email || "…"}</b>. Introdu codul de 6 cifre pentru a continua.
       </p>
 
-      <div className="d-flex gap-2 mb-3">
-        <button
-          className="btn btn-primary"
-          onClick={requestOtp}
-          disabled={loadingReq || cooldown > 0}
-        >
-          {loadingReq ? "Trimit…" : cooldown > 0 ? `Trimite din nou (${cooldown}s)` : "Trimite codul pe email"}
-        </button>
-      </div>
-
-      <form onSubmit={verifyOtp} className="mb-3">
-        <label className="form-label">Cod OTP (6 cifre)</label>
+      <form onSubmit={verifyCode} style={{ marginBottom: 12 }}>
+        <label style={{ display: "block", marginBottom: 8 }}>Cod de 6 cifre</label>
         <input
-          className="form-control"
+          type="text"
           inputMode="numeric"
-          pattern="\d{6}"
-          maxLength={6}
-          value={otp}
-          onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-          placeholder="000000"
+          pattern="[0-9]{6}"
+          value={code}
+          onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+          required
+          style={{
+            width: "100%",
+            padding: 10,
+            fontSize: 18,
+            letterSpacing: 2,
+            marginBottom: 12,
+            border: "1px solid #ddd",
+            borderRadius: 8,
+          }}
         />
-        <button className="btn btn-success mt-3" disabled={loadingVerify || otp.length !== 6}>
-          {loadingVerify ? "Verific…" : "Verifică OTP"}
+        <button
+          type="submit"
+          disabled={status === "verifying" || code.length !== 6}
+          style={{ padding: "10px 14px", borderRadius: 8, border: 0, background: "#0ea5e9", color: "#fff" }}
+        >
+          {status === "verifying" ? "Verific…" : "Verifică codul"}
         </button>
       </form>
 
-      {statusMsg && <div className="alert alert-info mt-3 mb-0">{statusMsg}</div>}
+      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <button
+          onClick={requestCode}
+          disabled={cooldown > 0 || status === "sending"}
+          style={{ padding: "8px 12px", borderRadius: 8, border: "1px solid #ddd" }}
+        >
+          {cooldown > 0 ? `Trimite din nou (${cooldown}s)` : "Trimite din nou"}
+        </button>
+        {!!error && (
+          <span style={{ color: "#c00" }}>
+            {error === "invalid" && "Cod invalid"}
+            {error === "expired" && "Cod expirat – trimite din nou"}
+            {error === "locked" && "Prea multe încercări – așteaptă"}
+            {error === "too_many_resends" && "Limită de resend atinsă"}
+            {["send_failed", "cooldown", "missing_code", "code_not_found", "internal"].includes(error) &&
+              "A apărut o eroare"}
+          </span>
+        )}
+      </div>
     </div>
+  );
+}
+
+export default function MFAPage() {
+  // IMPORTANT: Suspense pentru useSearchParams()
+  return (
+    <Suspense fallback={<div />}>
+      <MFAPageInner />
+    </Suspense>
   );
 }

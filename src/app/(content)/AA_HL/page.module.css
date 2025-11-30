@@ -1,0 +1,207 @@
+/* src/app/(content)/AA_HL/page.module.css */
+
+/* ——————————————————————————————————————————————
+   IB Math AA HL — Course Overview Page
+   Layout: Title Card + 3x2 grid of module cards
+   Tema AA HL: fundal violet deschis în hero + hover mov pe carduri
+—————————————————————————————————————————————— */
+
+/* General background (page wrapper) */
+.pageBg {
+  background: #ffffff;
+  min-height: calc(100vh - var(--header-offset));
+}
+
+/* Hero (title + description)
+   înainte: verde pastel (#eaf7f1) + umbre teal
+   acum: mov pastel (var(--accent-bg)) + umbre mov
+*/
+.hero {
+  background: var(--accent-bg);
+  border-radius: 16px;
+  box-shadow:
+    0 10px 26px rgba(76, 29, 149, 0.10),   /* mov închis 0.10 */
+    0 2px 6px rgba(76, 29, 149, 0.06);     /* mov închis 0.06 */
+  border: 1px solid rgba(76, 29, 149, 0.10);
+}
+
+/* 1200px wide wrapper for both title and cards */
+.wrap1200 {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;  /* 16px */
+  padding-right: 1rem; /* 16px */
+}
+
+/* 3-column grid for cards (auto-wraps on smaller screens) */
+.rows {
+  margin-top: 20px; /* space below title card */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  justify-content: initial;
+  align-items: stretch; /* guard */
+}
+
+/* Single card (stare normală)
+   păstrăm exact fundalul crem/alb original
+   păstrăm border-ul inițial (teal-transparent)
+*/
+.card {
+  display: block;
+  width: 100%;
+  height: 180px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--warm-gray-50) 0%, #ffffff 100%);
+  border: 1.5px solid rgba(15, 61, 55, 0.25);
+  box-shadow:
+    0 8px 18px rgba(2, 8, 23, 0.05),
+    0 2px 6px rgba(2, 8, 23, 0.04);
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease;
+  will-change: transform, box-shadow;
+  text-decoration: none !important;
+  min-width: 0; /* guard anti-overflow */
+}
+
+/* Focus visible (accessibility)
+   înainte: outline teal
+   acum: outline mov, folosind var(--accent-dark)
+*/
+.card:focus-visible {
+  outline: 3px solid rgba(76, 29, 149, 0.4); /* mov închis ~ var(--accent-dark) */
+  outline-offset: 3px;
+}
+
+/* Inner layout (keeps title vertically balanced) */
+.cardInner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 20px 12px;
+}
+
+/* Top row: icon badge + tags */
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+/* Icon badge (white background + ink border)
+   rămâne neschimbat (border verde-închis actual)
+*/
+.badge {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: #fff;
+  border: 2px solid #0f3d37;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(2, 8, 23, 0.08);
+}
+
+/* Icons inherit text color (no fixed stroke) */
+.badge svg {
+  color: #0f3d37;          /* default ink tone */
+  stroke: currentColor;    /* ensure currentColor inheritance */
+}
+
+/* Tag group */
+.tags {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 6px;
+}
+
+/* Tag styles (#Teachers / #Students) */
+.tag {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--brand-red);
+}
+
+/* Color tokens for tags */
+.tagStudents { color: var(--tag-students); }
+.tagTeachers { color: var(--tag-teachers); }
+
+/* Title below top icons — pushes itself to bottom for balance
+   rămâne verde-închis global (var(--ink)), NU îl trecem pe mov acum
+*/
+.title {
+  margin-top: auto;
+  color: var(--ink) !important;
+  font-weight: 600;
+  font-size: 40px;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-decoration: none !important;
+  white-space: normal;     /* allow natural line break */
+}
+
+/* Title helpers (kept for consistency across course pages) */
+.titleLg { font-size: 40px; font-weight: 600; }
+.titleMd { font-size: 40px; font-weight: 600; }
+
+/* Hover / active animation
+   AICI schimbăm ce ți-ai dorit:
+   - tot cardul se umple cu mov pastel (var(--accent-bg))
+   - border devine mov mediu (var(--accent-mid))
+   - păstrăm mișcarea și shadow-ul
+*/
+.card:hover {
+  background: var(--accent-bg);       /* mov pastel full */
+  border-color: var(--accent-mid);    /* mov mediu pe chenar */
+
+  transform: translateY(-6px) scale(1.01) rotateX(1deg) rotateY(0.6deg);
+  box-shadow:
+    0 16px 36px rgba(2, 8, 23, 0.10),
+    0 6px 14px rgba(2, 8, 23, 0.06);
+  filter: saturate(1.03);
+}
+
+.card:active {
+  animation: card-shake 180ms ease-in-out;
+  transform: translateY(-2px) scale(0.99);
+}
+
+@keyframes card-shake {
+  0%   { transform: translateY(-2px) rotateZ(0deg); }
+  25%  { transform: translateY(-2px) rotateZ(0.6deg); }
+  50%  { transform: translateY(-2px) rotateZ(-0.6deg); }
+  75%  { transform: translateY(-2px) rotateZ(0.4deg); }
+  100% { transform: translateY(-2px) rotateZ(0deg); }
+}
+
+/* Never underline anything in the grid */
+.rows * {
+  text-decoration: none !important;
+}
+
+/* Extra breathing room below last row */
+.bottomPad {
+  padding-bottom: 50px;
+}
+
+/* ——— Local theme (Segoe UI + Deep Navy) ——— */
+.qbNavy {
+  font-family: "Segoe UI", SegoeUI, -apple-system, system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+.qbNavy .heroTitle { color: #00264D; }
+.qbNavy .heroText  { color: #00264D; }
+.qbNavy .railKicker,
+.qbNavy .railTitle,
+.qbNavy .cardTitle { color: #00264D; }
+
+/* Padding mutat din inline style (header) */
+.headerPad { padding-top: 10px; }

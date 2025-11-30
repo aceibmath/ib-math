@@ -1,0 +1,20 @@
+//Exemplu în Questionbank AA SL (sau oriunde vrei tu o problemă AA SL)//
+
+
+import ProblemRowAASL from "@/components/problem/ProblemRowAASL";
+
+<ProblemRowAASL
+  index={0} // Question 1
+  statementMd={`AICI INSERĂM ENUNȚUL PROBLEMEI, cu LaTeX \\(x^2\\) etc.`}
+  solutionMd={`AICI INSERĂM MARKSCHEME-UL, cu pașii de rezolvare.`}
+  tech="gdc"              // sau "no gdc"
+  difficulty="Easy"
+  hasVideo={true}
+  hasTutor={true}
+  hideCalcBadge={false}
+/>
+
+
+
+//Past Papers AI SL? Atunci imporți ProblemRowAISL și îi dai props. 
+// Prediction Exams AA HL? Importă ProblemRowAAHL și dai props.

@@ -1,0 +1,202 @@
+﻿/* src/app/(content)/AA_SL/page.module.css */
+
+/* ——————————————————————————————————————————————
+   IB Math AA SL — Course Overview Page
+   Layout: Title Card + 3x2 grid of module cards
+   Hover pe card: verde deschis (fundal) + contur verde închis
+—————————————————————————————————————————————— */
+
+/* General background (page wrapper) */
+.pageBg {
+  background: #ffffff;
+  min-height: calc(100vh - var(--header-offset));
+}
+
+/* Hero (title + description) — rămâne verde pastel + umbră teal */
+.hero {
+  background: #eaf7f1;
+  border-radius: 16px;
+  box-shadow:
+    0 10px 26px rgba(16, 94, 79, 0.10),
+    0 2px 6px rgba(16, 94, 79, 0.06);
+  border: 1px solid rgba(16, 94, 79, 0.10);
+}
+
+/* 1200px wide wrapper for both title and cards */
+.wrap1200 {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;  /* 16px */
+  padding-right: 1rem; /* 16px */
+}
+
+/* 3-column grid for cards (auto-wraps on smaller screens) */
+.rows {
+  margin-top: 20px; /* space below title card */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  justify-content: initial;
+  align-items: stretch; /* asigura inaltime consistentă */
+}
+
+/* Single card (stare normală) */
+.card {
+  display: block;
+  width: 100%;
+  height: 180px;
+  border-radius: 22px;
+
+  /* fundal crem/alb inițial (la fel ca la HL înainte de hover) */
+  background: linear-gradient(135deg, var(--warm-gray-50) 0%, #ffffff 100%);
+
+  /* border implicit slab verzui-gri (păstrăm) */
+  border: 1.5px solid rgba(15, 61, 55, 0.25);
+
+  box-shadow:
+    0 8px 18px rgba(2, 8, 23, 0.05),
+    0 2px 6px rgba(2, 8, 23, 0.04);
+
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease;
+
+  will-change: transform, box-shadow;
+  text-decoration: none !important;
+  min-width: 0; /* guard anti-overflow */
+}
+
+/* Focus visible (accessibility) */
+.card:focus-visible {
+  outline: 3px solid rgba(15, 118, 110, 0.4); /* teal */
+  outline-offset: 3px;
+}
+
+/* Inner layout (keeps title vertically balanced) */
+.cardInner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 20px 12px;
+}
+
+/* Top row: icon badge + tags */
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 84px; /* aliniază titlurile */
+}
+
+/* Icon badge (white background + ink border) */
+.badge {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: #fff;
+  border: 2px solid #0f3d37;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(2, 8, 23, 0.08);
+}
+
+/* Icons inherit text color (no fixed stroke) */
+.badge svg {
+  color: #0f3d37;          /* default ink tone */
+  stroke: currentColor;    /* ensure currentColor inheritance */
+}
+
+/* Tag group */
+.tags {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 6px;
+}
+
+/* Tag styles */
+.tag {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--brand-red);
+}
+
+/* Color tokens for tags */
+.tagStudents { color: var(--tag-students); }
+.tagTeachers { color: var(--tag-teachers); }
+
+/* Title text din card (Questionbank / Past Papers etc.) */
+.title {
+  margin-top: auto;
+  color: var(--ink) !important;
+  font-weight: 600;
+  font-size: 40px;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-decoration: none !important;
+  white-space: normal;     /* allow natural line break */
+}
+
+/* Title helpers (kept for consistency across course pages) */
+.titleLg { font-size: 40px; font-weight: 600; }
+.titleMd { font-size: 40px; font-weight: 600; }
+
+/* Hover / active animation
+   AICI aplicăm:
+   - fundal verde deschis-albăstrui (aceeași familie ca hero-ul tău inițial)
+   - ramă verde închis (teal saturat, brand SL)
+   - păstrăm animația 3D și shadow-ul
+*/
+.card:hover {
+  background: #eaf7f1;          /* verde deschis / aqua pastel */
+  border-color: #0f766e;        /* verde închis-albăstrui brand */
+
+  transform: translateY(-6px) scale(1.01) rotateX(1deg) rotateY(0.6deg);
+  box-shadow:
+    0 16px 36px rgba(2, 8, 23, 0.10),
+    0 6px 14px rgba(2, 8, 23, 0.06);
+  filter: saturate(1.03);
+}
+
+.card:active {
+  animation: card-shake 180ms ease-in-out;
+  transform: translateY(-2px) scale(0.99);
+}
+
+@keyframes card-shake {
+  0%   { transform: translateY(-2px) rotateZ(0deg); }
+  25%  { transform: translateY(-2px) rotateZ(0.6deg); }
+  50%  { transform: translateY(-2px) rotateZ(-0.6deg); }
+  75%  { transform: translateY(-2px) rotateZ(0.4deg); }
+  100% { transform: translateY(-2px) rotateZ(0deg); }
+}
+
+/* Never underline anything in the grid */
+.rows * {
+  text-decoration: none !important;
+}
+
+/* Extra breathing room below last row */
+.bottomPad {
+  padding-bottom: 50px;
+}
+
+/* ——— Local theme (Segoe UI + Deep Navy) ——— */
+.qbNavy {
+  font-family: "Segoe UI", SegoeUI, -apple-system, system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+.qbNavy .heroTitle { color: #00264D; }
+.qbNavy .heroText  { color: #00264D; }
+.qbNavy .railKicker,
+.qbNavy .railTitle,
+.qbNavy .cardTitle { color: #00264D; }
+
+/* Padding mutat din inline style */
+.headerPad { padding-top: 10px; }

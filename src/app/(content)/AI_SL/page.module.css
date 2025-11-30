@@ -1,0 +1,187 @@
+/* src/app/(content)/AI_SL/page.module.css */
+
+/* ——————————————————————————————————————————————
+   IB Math AI SL — Course Overview Page
+   Layout: Title Card + 3x2 grid of module cards
+   Hover pe card: același galben pastel ca hero (from #FFFDE7 to #FEF3C7)
+   + contur portocaliu foarte închis (#B45309)
+—————————————————————————————————————————————— */
+
+/* Background general */
+.pageBg {
+  background: #ffffff;
+  min-height: calc(100vh - var(--header-offset));
+}
+
+/* Hero (title + description)
+   momentan AI SL încă folosește stilul verde moale.
+   îl păstrăm neschimbat deocamdată până decidem culoarea de hero pentru AI SL.
+*/
+.hero {
+  background: #eaf7f1;
+  border-radius: 16px;
+  box-shadow:
+    0 10px 26px rgba(16, 94, 79, 0.10),
+    0 2px 6px rgba(16, 94, 79, 0.06);
+  border: 1px solid rgba(16, 94, 79, 0.10);
+}
+
+/* Container 1280px */
+.wrap1200 {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Grid de carduri */
+.rows {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  justify-content: initial;
+  align-items: stretch; /* egalizează înălțimea */
+}
+
+/* Card individual (stare normală) */
+.card {
+  display: block;
+  width: 100%;
+  height: 180px;
+  min-width: 0; /* previne overflow */
+  border-radius: 22px;
+
+  background: linear-gradient(135deg, var(--warm-gray-50) 0%, #ffffff 100%);
+  border: 1.5px solid rgba(15, 61, 55, 0.25);
+
+  box-shadow:
+    0 8px 18px rgba(2, 8, 23, 0.05),
+    0 2px 6px rgba(2, 8, 23, 0.04);
+
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    filter 180ms ease;
+
+  will-change: transform, box-shadow;
+  text-decoration: none !important;
+}
+
+/* Focus vizibil (accessibility) */
+.card:focus-visible {
+  outline: 3px solid rgba(15, 118, 110, 0.4); /* rămâne cum e acum */
+  outline-offset: 3px;
+}
+
+/* Interiorul cardului */
+.cardInner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 20px 12px;
+}
+
+/* Rândul superior: icon + taguri */
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 84px; /* standardizează poziția titlului */
+}
+
+/* Icon badge */
+.badge {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: #fff;
+  border: 2px solid #0f3d37;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(2, 8, 23, 0.08);
+}
+.badge svg {
+  color: #0f3d37;
+  stroke: currentColor;
+}
+
+/* Taguri (#Students / #Teachers) */
+.tags {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 6px;
+}
+.tag {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--brand-red);
+}
+.tagStudents { color: var(--tag-students); }
+.tagTeachers { color: var(--tag-teachers); }
+
+/* Titlul cardului */
+.title {
+  margin-top: auto;
+  color: var(--ink) !important;
+  font-weight: 600;
+  font-size: 40px;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-decoration: none !important;
+  white-space: normal;
+}
+
+/* Hover efect AI SL
+   - fundal galben pastel identic cu cardul de titlu:
+        de la #FFFDE7 (luminos) spre #FEF3C7 (miere deschisă)
+   - contur portocaliu-maro închis (#B45309)
+   - păstrăm animația 3D și shadow-ul
+*/
+.card:hover {
+  background: linear-gradient(
+    135deg,
+    #FFFDE7 0%,
+    #FEF3C7 100%
+  );
+  border-color: #B45309;
+
+  transform: translateY(-6px) scale(1.01) rotateX(1deg) rotateY(0.6deg);
+  box-shadow:
+    0 16px 36px rgba(2, 8, 23, 0.10),
+    0 6px 14px rgba(2, 8, 23, 0.06);
+  filter: saturate(1.03);
+}
+
+.card:active {
+  animation: card-shake 180ms ease-in-out;
+  transform: translateY(-2px) scale(0.99);
+}
+
+@keyframes card-shake {
+  0%   { transform: translateY(-2px) rotateZ(0deg); }
+  25%  { transform: translateY(-2px) rotateZ(0.6deg); }
+  50%  { transform: translateY(-2px) rotateZ(-0.6deg); }
+  75%  { transform: translateY(-2px) rotateZ(0.4deg); }
+  100% { transform: translateY(-2px) rotateZ(0deg); }
+}
+
+/* Fără underline în grilă */
+.rows * {
+  text-decoration: none !important;
+}
+
+/* Spațiu jos */
+.bottomPad {
+  padding-bottom: 50px;
+}
+
+/* Padding header */
+.headerPad {
+  padding-top: 10px;
+}

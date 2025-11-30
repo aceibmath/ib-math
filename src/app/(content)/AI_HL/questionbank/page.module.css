@@ -1,0 +1,298 @@
+/* src/app/(content)/AI_HL/questionbank/page.module.css  */
+/* Stil AI HL = aqua/teal pastel
+   Folosim variabile globale:
+   --ai-hl-light  (#E0F7F6)  fundal deschis
+   --ai-hl-dark   (#0E7490)  accent închis
+*/
+
+/* =========================
+   Hero (bara de titlu AI HL)
+   ========================= */
+.heroTitle {
+  color: var(--ink);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.heroText {
+  color: color-mix(in oklab, var(--ink) 80%, white);
+  line-height: 1.5;
+  font-size: 15.5px;
+}
+
+/* =========================
+   Layout: rail stânga + cards dreapta
+   ========================= */
+.qbGrid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+}
+
+.leftRail {
+  align-self: start;
+  background: #ffffff;
+  border: 1px solid rgba(2, 8, 23, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(2, 8, 23, .04);
+  overflow: hidden;
+}
+
+.railList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.railItem {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  text-align: left;
+  padding: 12px 14px;
+  background: #fff;
+  border: none;
+  border-bottom: 1px solid rgba(2, 8, 23, 0.06);
+  cursor: pointer;
+  transition: background-color .15s ease;
+}
+
+.railItem:hover {
+  background: var(--ai-hl-light); /* highlight pe hover, aqua pastel */
+}
+
+.railItem:last-child {
+  border-bottom: none;
+}
+
+.railItemActive {
+  /* starea activă (Topic selectat): fundal aqua pastel */
+  background: var(--ai-hl-light);
+
+  /* efect de bară stânga groasă în culoarea accent închis AI HL */
+  border-left: 4px solid var(--ai-hl-dark);
+  padding-left: 10px;
+
+  /* extra contur interior subtil ca să pară "ridicat" */
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklab, var(--ai-hl-dark) 40%, transparent);
+}
+
+.railKicker {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b; /* slate-500 */
+  line-height: 1;
+}
+
+.railTitle {
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+/* =========================
+   Dreapta (zona cu carduri pentru subtopicuri)
+   ========================= */
+.cardsWrap {
+  padding-bottom: 56px; /* spațiu jos ca să nu lovească footer */
+}
+
+.sectionTitle {
+  margin: 4px 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+/* grilă carduri: 3 pe rând desktop */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+}
+
+/* -------------------------
+   Card subtopic AI HL
+   -------------------------
+   - vizual identic cu AA_SL dar în paleta AI HL:
+   hover = var(--ai-hl-light),
+   accent/border = var(--ai-hl-dark)
+*/
+.card {
+  display: block;
+  text-decoration: none !important;
+
+  border-radius: 18px;
+  background: var(--warm-gray-50, #f5f5f4); /* neutru cald de bază */
+  border: 2px solid rgba(2, 8, 23, 0.06);
+  box-shadow:
+    0 8px 18px rgba(2, 8, 23, 0.05),
+    0 2px 6px rgba(2, 8, 23, 0.04);
+
+  min-height: 153px;
+
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    filter 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+/* Hover AI HL */
+.card:hover {
+  background: var(--ai-hl-light);
+  border-color: color-mix(in oklab, var(--ai-hl-dark) 35%, transparent);
+
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 36px rgba(2, 8, 23, 0.10),
+    0 6px 14px rgba(2, 8, 23, 0.06);
+  filter: saturate(1.03);
+}
+
+/* Focus accesibil */
+.card:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px var(--ai-hl-light),
+    0 0 0 6px color-mix(in oklab, var(--ai-hl-dark) 35%, transparent);
+  background: var(--ai-hl-light);
+  border-color: color-mix(in oklab, var(--ai-hl-dark) 35%, transparent);
+}
+
+/* interiorul cardului */
+.cardInner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 18px 14px;
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* badge pătrat cu icon */
+.badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #fff;
+  border: 2px solid var(--ai-hl-dark);  /* contur accent AI HL */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(2, 8, 23, 0.08);
+}
+
+/* titlul cardului ("Sequences & Series") */
+.cardTitle {
+  margin-top: auto;
+  font-weight: 650;
+  font-size: 25px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink); /* text principal închis (nu mov, nu galben) */
+}
+
+/* descriere mică (dacă o folosim) */
+.cardDesc {
+  margin-top: 6px;
+  color: color-mix(in oklab, var(--ink) 75%, white);
+  font-size: 13.5px;
+  line-height: 1.35;
+}
+
+/* ======================================================
+   HEADERUL fiecărei întrebări în pagina de subtopic AI HL
+   (Question 1 | Mark Scheme | CALCULATOR | Medium | ...)
+   Folosește paleta AI HL:
+   - fundal pastel aqua -> var(--ai-hl-light)
+   - accent/dark text -> var(--ai-hl-dark)
+   ====================================================== */
+
+.rowCardHeaderAIHL {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+
+  background: var(--ai-hl-light); /* aqua pastel */
+  border-bottom: 1px solid color-mix(in oklab, var(--ai-hl-dark) 30%, transparent);
+  border-radius: 8px 8px 0 0;
+  padding: 8px 12px;
+}
+
+/* stânga headerului: "Question 1" */
+.qNumberAIHL {
+  font-weight: 700;
+  color: var(--ai-hl-dark); /* teal/albastru închis */
+  font-size: 1rem;
+}
+
+/* butonul din centru: "Mark Scheme" */
+.markBtnCenterAIHL {
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--ai-hl-dark);
+  background: #fff;
+  color: var(--ai-hl-dark);
+  font-weight: 500;
+  font-size: 0.9rem;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.markBtnCenterAIHL:hover {
+  background: var(--ai-hl-dark);
+  color: #fff;
+}
+
+/* chips din dreapta: CALCULATOR / Medium / Video / Tutor IA */
+.metaChipAIHL {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  border: 1px solid color-mix(in oklab, var(--ai-hl-dark) 40%, transparent);
+  background: #ffffff;
+  color: var(--ai-hl-dark);
+}
+
+/* folosești asta pentru chipuri inactive (ex: Video indisponibil) */
+.metaOffAIHL {
+  opacity: 0.4;
+}
+
+/* ======================================================
+   Responsive
+   ====================================================== */
+@media (max-width: 1024px) {
+  .qbGrid {
+    grid-template-columns: 1fr;
+  }
+  .leftRail {
+    order: 2;
+  }
+  .cardsWrap {
+    order: 1;
+  }
+  .cardsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .cardsGrid {
+    grid-template-columns: 1fr;
+  }
+  .cardTitle {
+    font-size: 22px;
+  }
+}

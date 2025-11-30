@@ -1,0 +1,84 @@
+{
+  "products": [
+    {
+      "name": "Complete Learning Suite Teacher Pro",
+      "slug": "TCHR_SUITE",
+      "course_keys": ["AA_SL", "AA_HL", "AI_SL", "AI_HL"],
+      "teacher": true,
+      "bundle": true,
+      "prices": {}
+    },
+    {
+      "name": "HL Applications & Interpretation Teacher Pro",
+      "slug": "TCHR_AI_HL",
+      "course_keys": ["AI_HL"],
+      "teacher": true,
+      "bundle": false,
+      "prices": {}
+    },
+    {
+      "name": "SL Applications & Interpretation Teacher Pro",
+      "slug": "TCHR_AI_SL",
+      "course_keys": ["AI_SL"],
+      "teacher": true,
+      "bundle": false,
+      "prices": {}
+    },
+    {
+      "name": "HL Analysis & Approaches Teacher Pro",
+      "slug": "TCHR_AA_HL",
+      "course_keys": ["AA_HL"],
+      "teacher": true,
+      "bundle": false,
+      "prices": {}
+    },
+    {
+      "name": "SL Analysis & Approaches Teacher Pro",
+      "slug": "TCHR_AA_SL",
+      "course_keys": ["AA_SL"],
+      "teacher": true,
+      "bundle": false,
+      "prices": {}
+    },
+    {
+      "name": "Complete Learning Suite",
+      "slug": "SUITE",
+      "course_keys": ["AA_SL", "AA_HL", "AI_SL", "AI_HL"],
+      "teacher": false,
+      "bundle": true,
+      "prices": {}
+    },
+    {
+      "name": "HL Applications & Interpretation",
+      "slug": "AI_HL",
+      "course_keys": ["AI_HL"],
+      "teacher": false,
+      "bundle": false,
+      "prices": {}
+    },
+    {
+      "name": "SL Applications & Interpretation",
+      "slug": "AI_SL",
+      "course_keys": ["AI_SL"],
+      "teacher": false,
+      "bundle": false,
+      "prices": {}
+    },
+    {
+      "name": "HL Analysis & Aproches",
+      "slug": "AA_HL",
+      "course_keys": ["AA_HL"],
+      "teacher": false,
+      "bundle": false,
+      "prices": {}
+    },
+    {
+      "name": "SL Analysis & Aproches",
+      "slug": "AA_SL",
+      "course_keys": ["AA_SL"],
+      "teacher": false,
+      "bundle": false,
+      "prices": {}
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+/* ------------------- CADRU SELECTOR ------------------- */
+.fcRoot {
+  border: 1px solid #F5F7FA;
+  border-radius: 18px;
+  background: #fff;
+  padding: 18px 16px 22px;
+}
+
+/* ------------------- LAYOUT STABIL – GRID-URI ------------------- */
+.topicBar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  align-items: center;
+  justify-items: stretch;
+}
+
+.chevronBar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: 8px;
+  margin-bottom: 10px;
+}
+
+.centerCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+}
+
+.subsGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.subsCol {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 10px;
+}
+
+/* ------------------- BUTOANE GENERALE ------------------- */
+.fcBtn {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid #F5F7FA;
+  background: #F5F7FA;
+  color: #425466;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform .06s ease,
+    box-shadow .12s ease,
+    background .12s ease,
+    color .12s ease,
+    border-color .12s ease;
+  will-change: transform;
+  user-select: none;
+}
+.fcBtn:active { transform: scale(0.985) translateZ(0); }
+.fcBtn:hover { box-shadow: 0 1px 0 rgba(16,24,40,.03), 0 1px 2px rgba(16,24,40,.06); }
+
+/* ------------------- TOPIC (idle vs active) ------------------- */
+.fcBtnTopic { height: 40px; }
+
+.fcBtnTopicOutline {             /* neselectat: contur gri închis, fundal alb */
+  background: #ffffff;
+  border-color: #94a3b8;         /* slate-400 */
+  color: #334155;                /* slate-700 */
+}
+
+/* ✅ selectat: fundalul deschis al cursului + contur/text culoarea cursului */
+.fcBtnTopicActive {
+  background: var(--sel-light, var(--aa-sl-light, #EAF9F3));
+  border-color: var(--sel-dark, var(--aa-sl-dark));
+  color: var(--sel-dark, var(--aa-sl-dark));
+}
+
+/* ------------------- SUBTOPIC (idle + SELECTED) ------------------- */
+.fcBtnSub { height: 40px; }
+
+.fcBtnSubIdle {
+  background: #EEF2F6;           /* gri foarte deschis */
+  border-color: #E2E8F0;         /* slate-200 */
+  color: #334155;                 /* slate-700 */
+}
+
+/* ✅ selectat: la fel ca topicul activ (fundal deschis al cursului) */
+.fcBtnSubSelected {
+  background: var(--sel-light, var(--aa-sl-light, #EAF9F3));
+  border-color: var(--sel-dark, var(--aa-sl-dark));
+  color: var(--sel-dark, var(--aa-sl-dark));
+}
+
+/* ------------------- Chevron pe culoarea temei ------------------- */
+.chev { display: block; }
+.chevActive { color: var(--sel-dark, var(--aa-sl-dark)); }
+.chevBetween {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 0 4px;
+}
+
+/* ------------------- Start Deck ------------------- */
+.fcBtnStart {
+  height: 40px;
+  background: var(--sel-dark, var(--aa-sl-dark));
+  border-color: var(--sel-dark, var(--aa-sl-dark));
+  color: #fff;
+  font-weight: 600;
+  border-radius: 14px;
+  text-decoration: none;          /* pentru <a> */
+}
+
+/* ✅ păstrează textul ALB în toate stările */
+.fcBtnStart:hover,
+.fcBtnStart:focus-visible,
+.fcBtnStart:visited {
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 2px 10px rgba(16, 78, 70, .18);
+}
+
+.fcBtnStartDisabled {
+  height: 40px;
+  background: #F1F5F9;           /* slate-100 */
+  border-color: #E2E8F0;         /* slate-200 */
+  color: #94A3B8;                /* slate-400 */
+  border-radius: 14px;
+  cursor: not-allowed;
+}
+
+/* ------------------- Responsive ------------------- */
+@media (max-width: 1000px) {
+  .topicBar,
+  .chevronBar,
+  .subsGrid { grid-template-columns: 1fr; }
+}

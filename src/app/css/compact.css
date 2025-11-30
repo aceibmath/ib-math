@@ -1,0 +1,51 @@
+/* ===== Compact mode global pe înălțimi mici ===== */
+
+/* Token-uri globale pentru înălțimi/gap/padding */
+:root{
+  --ui-btn-h: 40px;          /* butoane/pill-uri default */
+  --ui-start-h: 44px;        /* Start / Submit mai înalt */
+  --ui-gap: 16px;            /* spații între elemente */
+  --ui-ptb: 14px;            /* padding vertical de secțiune */
+}
+
+/* Când fereastra are înălțime ≤ 820px, intră compact mode */
+@media (max-height: 820px){
+  :root{
+    --ui-btn-h: 36px;
+    --ui-start-h: 38px;
+    --ui-gap: 12px;
+    --ui-ptb: 8px;
+  }
+
+  /* 1) Spații verticale mai mici în zonele mari */
+  .pageHeader, .hero, .section, .fcRoot{
+    padding-top: var(--ui-ptb) !important;
+    padding-bottom: var(--ui-ptb) !important;
+  }
+
+  /* 2) Înălțimi unificate pentru controale uzuale de pe platformă */
+  /* (listez clasele comune pe care le avem deja în proiect) */
+  .fcBtn,
+  .topicBtn,
+  .submitBtn,
+  .markBtnCenter,
+  .btn,
+  .pill {
+    height: var(--ui-btn-h) !important;
+  }
+  .fcBtnStart,
+  .submitBtn.primary {
+    height: var(--ui-start-h) !important;
+  }
+
+  /* 3) Gaps/spacing în grile frecvente (flashcards, questionbank) */
+  .topicBar,
+  .chevronBar,
+  .subsGrid,
+  .cardsGrid{
+    gap: var(--ui-gap) !important;
+  }
+
+  /* 4) Micșorări fine acolo unde avem chevronuri / separatoare */
+  .centerCell{ height: 12px !important; }
+}

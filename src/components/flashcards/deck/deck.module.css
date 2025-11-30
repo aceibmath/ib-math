@@ -1,0 +1,183 @@
+/* src/components/flashcards/deck/deck.module.css */
+
+/* ====== Layout principal ====== */
+.wrap {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  --deck-shell-h: clamp(420px, calc(100vh - var(--header-offset) - 100px), 800px);
+}
+
+/* Col stânga */
+.leftCol { display: flex; flex-direction: column; min-height: 0; }
+.problemShell { height: var(--deck-shell-h); min-height: 420px; }
+
+/* Navigația de jos (stânga) */
+.bottomNav {
+  display: flex; align-items: center; justify-content: center;
+  gap: 28px; margin-top: 12px;
+}
+.navArrow { cursor: pointer; border: none; background: none; font-size: 18px; }
+.navCounter { color: #6b7280; font-weight: 600; }
+
+/* ====== Cardul problemei (interior) ====== */
+.problemCard {
+  height: 100%; display: flex; flex-direction: column;
+  border: 1px solid #d8e2ee; border-radius: 16px; background: #fff; padding: 8px;
+}
+
+/* Header card */
+.cardHeader {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  gap: 8px; padding: 8px 6px; border-radius: 12px;
+  background: var(--fc-header-bg, #f4faf7);
+}
+.headerLeft { font-weight: 700; color: #0f3d37; padding-left: 6px; }
+.headerCenter { display: flex; justify-content: center; gap: 8px; }
+.headerRight { justify-self: end; }
+
+.markBtnCenter, .arrowBtn, .closeBtn {
+  border: 1px solid var(--fc-btn-border, #cfe3dc);
+  background: var(--fc-btn-bg, #fff);
+  border-radius: 12px;
+  padding: 6px 12px;
+  line-height: 1;
+  color: var(--fc-btn-text, #0f3d37);
+}
+.arrowBtn { width: 40px; }
+.closeBtn { width: 40px; font-weight: 700; }
+
+/* --- hover/focus tematizat prin CSS variables --- */
+.markBtnCenter:hover,
+.markBtnCenter:focus-visible,
+.arrowBtn:not(:disabled):hover,
+.arrowBtn:not(:disabled):focus-visible,
+.closeBtn:not(:disabled):hover,
+.closeBtn:not(:disabled):focus-visible {
+  background: var(--fc-btn-hover-bg, #0f766e);
+  border-color: var(--fc-btn-hover-border, #0f766e);
+  color: var(--fc-btn-hover-text, #fff);
+  outline: none;
+}
+
+/* Butoane dezactivate: fără hover, fără pointer */
+.arrowBtn:disabled,
+.closeBtn:disabled {
+  opacity: .5;
+  cursor: default;
+  pointer-events: none;
+  background: #fff;
+  border-color: #cfe3dc;
+  color: #64748b;
+}
+
+/* Body fix + scroll intern */
+.cardBody { flex: 1; min-height: 0; padding-top: 8px; }
+.scrollArea { height: 100%; overflow: auto; padding: 6px 8px 12px 8px; }
+
+.splitWrap { height: 100%; display: grid; grid-template-columns: 1fr 1px 1fr; gap: 14px; }
+.splitCol { min-height: 0; }
+.splitCol > .scrollArea { height: 100%; }
+.vLine { background: var(--fc-vline, #e5e7eb); width: 1px; }
+
+/* ====== Coloana din dreapta ====== */
+.rightCol { height: var(--deck-shell-h); display: flex; flex-direction: column; min-height: 0; }
+.rightCol :global(.submitBar) { margin-top: auto; }
+
+.rightPane {
+  border: none; background: transparent; border-radius: 0; padding: 0;
+  align-self: stretch; flex: 1; min-height: 0;
+}
+
+/* ====== Stats sus (pe parcursul deck-ului) ====== */
+.statsTop {
+  display: flex; justify-content: flex-end; gap: 24px;
+  font-size: 14px; margin: 0 0 8px 0;
+}
+.endAtt { color: #dc2626; }   /* roșu */
+.endCor { color: #065f46; }   /* verde */
+
+/* ====== Lista de opțiuni ====== */
+.choiceList { display: flex; flex-direction: column; gap: 10px; }
+
+.choiceBtn {
+  border: 1px solid #cfe3dc; background: #fff; border-radius: 12px;
+  padding: 18px 14px; display: flex; gap: 10px; align-items: center;
+  font-weight: 400; color: #1f2937;
+  transition: box-shadow .15s ease, background .15s ease, border-color .15s ease;
+}
+.choiceBtn:hover { box-shadow: 0 1px 2px rgba(16,24,40,.08); }
+.choiceLetter { width: 22px; color: #334155; }
+.choiceLabel { flex: 1; }
+
+.choiceSelected { background: #E6EBF2; }
+.choiceDisabled { opacity: .7; }
+.choiceCorrect { background: #eafff1; box-shadow: inset 0 0 0 1px #22c55e33; }
+.choiceWrong   { background: #fff2f1; box-shadow: inset 0 0 0 1px #ef444433; }
+
+/* Navigator sub opțiuni (pe parcurs) */
+.navRowRight {
+  display: flex; align-items: center; justify-content: center;
+  gap: 18px; margin: 12px 0 16px;
+}
+.navCounterRight { color: #0f3d37; font-weight: 600; }
+.navRowRight .navArrow[disabled] { opacity: .35; cursor: default; }
+
+/* ====== Cardul de final din dreapta ====== */
+.endCard {
+  border: 1px solid #d8e2ee; border-radius: 16px; background: #fff;
+  padding: 22px; min-height: 240px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; text-align: center;
+}
+
+.endStats { display: flex; gap: 28px; font-size: 14px; }
+
+.endNav {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  color: #0f3d37; font-weight: 600; font-size: 18px;
+}
+.endArrow { cursor: pointer; border: none; background: none; font-size: 18px; }
+.endArrowDisabled { color: #cbd5e1; font-size: 18px; }
+.endLabel {
+  color: var(--fc-end-label, #0f172a); /* gri foarte închis (fallback) */
+}
+
+.endReturn {
+  margin-top: 4px;
+  font-weight: 600;
+  color: var(--fc-end-link, var(--fc-end-label, #0f172a));
+  text-decoration: none;
+}
+
+.endReturn:hover {
+  text-decoration: underline;
+}
+
+
+/* ====== Submit bar ====== */
+.submitBar { margin-top: 14px; }
+/* Buton temabil – folosește culoarea cursului curent */
+.submitBtn {
+  width: 100%;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--fc-submit-border, var(--aa-sl-dark));
+  background: var(--fc-submit-bg, var(--aa-sl-dark));
+  color: var(--fc-submit-text, #fff);
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--fc-submit-hover-bg, color-mix(in srgb, var(--aa-sl-dark) 90%, black));
+  border-color: var(--fc-submit-hover-border, color-mix(in srgb, var(--aa-sl-dark) 90%, black));
+  color: var(--fc-submit-hover-text, #fff);
+}
+
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .wrap { grid-template-columns: 1fr; }
+  .rightCol { order: 2; }
+}

@@ -1,0 +1,254 @@
+:root {  
+  --red-accent: #e11d48;
+  --black: #111827;
+  --header-height: 64px;
+}
+
+/* Page */
+.membership-page {
+  width: 100%;
+  padding: 8px 14px 36px;
+  background: #ffffff;
+  font-weight: 400;
+  color: var(--black);
+}
+
+/* Plan bar — NON-STICKY */
+.sticky-planbar{ position: static; top: auto; z-index: auto; background: transparent; padding: 4px 0 6px; border-bottom: none; }
+.hero-inner { max-width: 1320px; margin: 0 auto; text-align: center; }
+.planbar{ display:inline-flex; align-items:center; gap:10px; background:transparent; border:none; }
+.planbar-label{ color: var(--black); font-size: 18px; padding: 4px 8px; white-space: nowrap; letter-spacing: .1px; }
+.planbar-tabs{ display:inline-flex; gap:6px; }
+.planbar-tab{
+  appearance:none; border:1px solid var(--black); background:#fff; color:var(--black);
+  padding:6px 12px; border-radius:999px; cursor:pointer; font-size:13px; font-weight:400;
+  transition: background .15s, color .15s, transform .04s;
+}
+.planbar-tab.active{ background: var(--black); color:#fff; }
+.planbar-tab:hover{ transform: translateY(-1px); }
+
+/* ===== LAYOUT: carduri cu lățime fixă & centrare ===== */
+.membership-grid{
+  max-width:1320px;
+  margin:12px auto 8px;
+  display:flex;
+  flex-wrap: wrap;
+  gap:20px;                          /* distanță orizontală și între rânduri */
+  justify-content:center;
+}
+/* distanța VERTICALĂ dintre rândurile de produse — mărită */
+.membership-grid + .membership-grid{ margin-top: 20px; }
+
+/* centrare perfectă a rândurilor cu UN singur card (dacă vei avea) */
+.membership-grid.center-one{ justify-content:center; }
+.membership-grid.center-one::before,
+.membership-grid.center-one::after{
+  content:"";
+  flex: 0 0 282px;
+}
+@media (max-width:900px){
+  .membership-grid.center-one::before,
+  .membership-grid.center-one::after{ display:none; }
+}
+
+/* Card — lățime fixă */
+.course-card{
+  width: 282px;
+  background:#fff;
+  border-radius:16px;
+  border:none;
+  box-shadow:0 6px 16px rgba(2,6,23,.08);
+  overflow:hidden; display:flex; flex-direction:column;
+  padding-top: 6px;
+}
+.course-card.disabled{ opacity:.6; pointer-events:none; }
+@media (max-width: 560px){ .course-card{ width: 100%; } }
+
+/* ===== Culori — STUDENT ===== */
+.card-aa-sl, .card-aa-hl{ background:#d9f4ea; }
+.card-ai-sl, .card-ai-hl{ background:#c8ebd8; }
+.card-suite{ background:#a3d9c3; }
+
+/* ===== Culori — TEACHER PRO (galben) ===== */
+.card-t-aa-sl, .card-t-aa-hl{ background:#fff6cc; }
+.card-t-ai-sl, .card-t-ai-hl{ background:#ffe28f; }
+.card-t-suite{ background:#ffd460; }
+
+/* Header card */
+.toprow{ display:flex; align-items:center; justify-content:space-between; padding: 0 12px 2px; }
+.left-label{ color:#6b7280; font-size:12px; line-height:1.2; white-space: nowrap; }
+.badge-premium{ font-size:12px; line-height:1; background:var(--red-accent); color:#fff; padding:6px 10px; border-radius:999px; white-space: nowrap; }
+
+/* Titlu */
+.line-title{ padding: 2px 12px 4px; }
+.line-title-main{
+  color: var(--black);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* Subtitluri pe linie separată */
+.line-title-sub{ font-size: 13px; font-weight: 400; line-height: 1.15; }
+.line-title-sub.pro{ color: var(--red-accent); }       /* Teacher PRO */
+.line-title-sub.student{ color: var(--red-accent); }   /* Student */
+
+/* Prețuri */
+.course-header{ padding:0 12px 2px; color:#374151; }
+.price-line{ display:flex; align-items:baseline; gap:8px; }
+.price-amount{ font-size:18px; font-weight:700; color:var(--black); }
+.price-note{ font-size:12px; color:#6b7280; }
+.price-sub{ font-size:12.5px; color:var(--black); margin-top:2px; }
+
+/* CTA */
+.cta-row{ padding:6px 12px 4px; text-align:center; }
+.start-btn{
+  appearance:none; border:1px solid #0b3d3b; background:#0b3d3b; color:#ffffff;
+  border-radius:999px; padding:5px 56px;
+  font-weight:400; cursor:pointer; font-size: 12.5px;
+  transition:background .12s ease, color .12s ease, border-color .12s ease, transform .04s ease;
+}
+.start-btn:hover, .start-btn:active{ background:#000000; border-color:#000000; color:#ffffff; }
+
+/* Info + features */
+.info-line{ padding:4px 12px 0; font-size:12.5px; color:var(--black); margin-bottom: 2px; }
+
+.course-body{ padding:0 12px 10px; }
+.course-body{ padding:0 12px 10px; }
+
+/* LISTA FEATURES — o singură coloană */
+.feature-list{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: block;        /* important: nu grid, nu multi-column */
+}
+.feature-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--black);
+  font-size:12.5px;
+  font-weight:400;
+}
+.feature-item .check{
+  width:6px; height:6px; border-radius:999px; background:var(--black); display:inline-block;
+}
+
+.feature-item{ display:flex; align-items:center; gap:8px; color:var(--black); font-size:12.5px; font-weight:400; }
+.feature-item .check{ width:6px; height:6px; border-radius:999px; background:var(--black); display:inline-block; }
+
+/* Elemente vechi ascunse */
+.checkout-card, .summary-row, .checkout-btn { display:none !important; }
+
+/* ========= Drawer typography & borders (scoped) ========= */
+.membership-drawer header {
+  /* lighter divider under "Select a course" */
+  border-bottom: 1px solid #d1d5db !important; /* gray-300 */
+}
+
+.membership-drawer header > *:first-child {
+  /* same font style as body titles, but bold */
+  font-family: inherit !important;
+  font-size: 22px !important;
+  font-weight: 600 !important;
+  line-height: 1.25;
+  margin: 0;
+}
+
+/* lighten the borders of the two selection boxes */
+.membership-drawer .drawer-body > div > div {
+  border-color: #d1d5db !important;              /* gray-300 */
+}
+
+.membership-drawer .drawer-body > div > div:hover {
+  border-color: #cbd5e1 !important;              /* slightly darker on hover */
+}
+
+/* remove the horizontal line above the action buttons */
+.membership-drawer .drawer-body + div {
+  border-top: 0 !important;
+}
+
+/* ===== RADIO BUTTONS – look: green outer ring, visible white gap, black dot with green outline ===== */
+/* valori ușor de reglat */
+:root{
+  --radio-size: 18px;        /* diametru cerc exterior */
+  --radio-ring: 3px;         /* grosime inel exterior */
+  --radio-dot: 6px;          /* diametru disc interior negru (fără contur) */
+  --radio-dot-border: 2px;   /* contur verde al dot-ului */
+  --radio-green: #0f3d37;    /* verde închis */
+  --radio-black: #ffffff;    /* umplere dot */
+}
+
+/* bază */
+.membership-drawer input[type="radio"]{
+  appearance: none;
+  -webkit-appearance: none;
+  width: var(--radio-size);
+  height: var(--radio-size);
+  border: var(--radio-ring) solid var(--radio-green); /* inel exterior */
+  border-radius: 50%;
+  background: #ffffff;                                 /* spațiul alb */
+  position: relative;
+  display: grid;
+  place-items: center;                                  /* centrează pseudo-elementul perfect */
+  cursor: pointer;
+  transition: box-shadow .12s ease, border-color .12s ease;
+}
+
+/* DOT interior – invizibil by default */
+.membership-drawer input[type="radio"]::after{
+  content: "";
+  width: calc(var(--radio-dot) + 2*var(--radio-dot-border));  /* dot + contur verde */
+  height: calc(var(--radio-dot) + 2*var(--radio-dot-border));
+  border-radius: 50%;
+  background: var(--radio-black);                             /* umplere neagră */
+  border: var(--radio-dot-border) solid var(--radio-green);   /* contur verde */
+  transform: scale(0);                                        /* ascuns când e ne-bifat */
+  transition: transform .12s ease;
+}
+
+/* DOT vizibil când e selectat */
+.membership-drawer input[type="radio"]:checked::after{
+  transform: scale(1);
+}
+
+/* focus & hover */
+.membership-drawer input[type="radio"]:focus-visible{
+  outline: 2px solid var(--radio-green);
+  outline-offset: 2px;
+}
+.membership-drawer input[type="radio"]:hover{
+  box-shadow: 0 0 0 3px rgba(15,61,55,.15);
+}
+
+/* Insigna pentru „All Courses” din cardurile Suite */
+.badge-suite {
+  display: inline-block;
+  padding: 0.28rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  background: #0f3d37; /* verde închis-albăstrui (CTA) */
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+/* Insigna pentru „Single Course” din cardurile single */
+.badge-single {
+  display: inline-block;
+  padding: 0.28rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  background: #0f3d37; /* aceeași culoare ca .badge-suite pentru consistență */
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  user-select: none;
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json.schemastore.org/package",
+  "name": "ib-math",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "export": "next export",
+    "build:pricing": "node scripts/generate-pricing-table.mjs"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@stripe/react-stripe-js": "^3.9.0",
+    "@stripe/stripe-js": "^7.8.0",
+    "better-react-mathjax": "^2.3.0",
+    "bootstrap": "^5.3.7",
+    "bootstrap-icons": "^1.11.3",
+    "firebase": "^10.7.1",
+    "firebase-admin": "^13.4.0",
+    "flowbite": "^3.1.2",
+    "flowbite-react": "^0.12.9",
+    "framer-motion": "^12.23.22",
+    "katex": "^0.16.25",
+    "mathlive": "^0.107.0",
+    "next": "15.4.5",
+    "nodemailer": "^7.0.5",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
+    "rehype-katex": "^7.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-math": "^6.0.0",
+    "stripe": "^18.4.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.9",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "typescript": "5.9.2"
+  }
+}

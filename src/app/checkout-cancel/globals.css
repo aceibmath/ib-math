@@ -1,0 +1,562 @@
+/* =========================================================
+   KaTeX (LaTeX)
+   ========================================================= */
+@import "katex/dist/katex.min.css";
+
+/* =========================================================
+   Font
+   ========================================================= */
+/* (ai scos deja Google Fonts; lăsăm doar sistem) */
+
+/* =========================================================
+   Bootstrap (global)
+   ========================================================= */
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+/* =========================================================
+   Tailwind v3 (OBLIGATORIU în v3 așa)
+   ========================================================= */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================
+   Variabile & culori globale
+   ========================================================= */
+:root{
+  /* ——— Header fix & stabil ——— */
+  --app-header-h: 96px;         /* desktop implicit */
+  --header-offset: var(--app-header-h);
+  --brand-ib-bg: #c92a2a;       /* roșu badge IB */
+  --brand-text: #0f172a;        /* slate-900 */
+  --brand-ib-bg1: #7A1F2A;      /* grena */
+
+  --ink: #0f3d37;               /* verde-închis/albăstrui */
+  --warm-gray-50: #FAF9F7;
+  --brand-red: #c92a2a;         /* rosu globală */
+  --tag-students: #10b981;      /* verde închis-albăstrui (lizibil) */
+  --tag-teachers: #c92a2a;      /* roșu viu (revenim la el) */
+  --grenat: #7A1F2A;            /* păstrăm grena ca rezervă */
+
+  /* Link accent */
+  --ace-accent: #0284c7;        /* sky-600 */
+  --ace-accent-hover: #075985;  /* sky-800 */
+
+  /* >>> Breadcrumb brand colour (consistent pe site) */
+  --crumb: #0f766e;
+  --crumb-hover: #0b6463;
+
+  /* Footer helpers */
+  --footer-h: 280px;
+  --footer-gap: 56px;
+  --rail-blue: #dbeafe;
+
+  /* =========================================================
+     Paleta oficială AceIBMath — Culori cursuri IB Mathematics
+     ========================================================= */
+
+  /* AA SL (verde-albastrui pastel) */
+  --aa-sl-light: #E0F2F1;   /* deschis, card hover, fundal soft */
+  --aa-sl-dark:  #0F766E;   /* închis, border hover, butoane accent */
+
+  /* AA HL (mov pastel) */
+  --aa-hl-light: #F3E8FF;   /* deschis, card hover */
+  --aa-hl-dark:  #7E22CE;   /* închis, border hover, accent */
+
+  /* AI SL (galben cald pastel) */
+  --ai-sl-light: #FFF7ED;   /* deschis, card hover */
+  --ai-sl-dark:  #B45309;   /* închis, border hover, accent pe butoane */
+
+  /* AI HL (aqua-mint pastel) */
+  --ai-hl-light: #E0F7F6;   /* deschis, card hover, hero bg */
+  --ai-hl-dark:   #0E7490;  /* închis, accent reutilizabil */
+
+  /* =========================================================
+     Header gradients per curs (pentru Past Papers, Questionbank, etc.)
+     ---------------------------------------------------------
+     start = nuanță foarte deschisă
+     end   = ușor mai saturată (max ~10%), pentru un gradient subtil premium
+     ========================================================= */
+
+  /* AI SL (galben vesel / miere caldă) */
+  --ai-sl-header-start: #FFF7C2;  /* un amber crem deschis, luminos */
+  --ai-sl-header-end:   #FACC15;  /* miere/auriu saturat, gen amber-400 */
+
+  /* AA SL (verde mentă academică) */
+  --aa-sl-header-start: #E8F8ED;
+  --aa-sl-header-end:   #DFF4E7;
+
+  /* AA HL (lavandă premium HL) */
+  --aa-hl-header-start: #F4E8FF;
+  --aa-hl-header-end:   #EBD9FE;
+
+  /* AI HL (aqua / teal pastel fresh) */
+  --ai-hl-header-start: #E6FAF7;
+  --ai-hl-header-end:   #D9F3EF;
+}
+
+/* =========================================================
+   THEME: AA HL (violet deschis / violet inchis / gri)
+   ---------------------------------------------------------
+   Folosim aceeași logică vizuală ca AA SL:
+   - ce era "verde deschis / teal deschis" -> mov deschis
+   - ce era "verde închis / teal închis"   -> mov închis
+   - tot ce era gri rămâne gri
+   IMPORTANT:
+   Aceste variabile nu sunt globale. Ele devin active DOAR
+   sub un wrapper cu className="course-theme-aa-hl".
+   ========================================================= */
+.course-theme-aa-hl {
+  /* accent dark = echivalentul verde-închis (buton Start Deck, headline accentuat) */
+  --accent-dark: #4C1D95;   /* violet închis, lizibil pe alb */
+
+  /* accent mid = echivalentul verde mediu/hover/badge solid */
+  --accent-mid:  #6D28D9;   /* violet mediu / hover / border accent */
+
+  /* accent bg = echivalentul verde foarte deschis folosit pe carduri soft */
+  --accent-bg:   #F3E8FF;   /* mov foarte deschis pentru background-uri soft */
+
+  /* neutral-bg = rămâne gen "gri foarte deschis" pentru secțiuni pale */
+  --neutral-bg:  #F5F7FA;   /* gri foarte deschis/slate-50-ish */
+
+  /* neutral-text = text normal pe carduri pale (în AA SL era gri/slate-600) */
+  --neutral-text:#475569;   /* slate-600 style, bun pt contrast pe mov deschis */
+
+  /* text alb peste accent-dark / accent-mid */
+  --accent-contrast: #ffffff;
+}
+
+@media (max-width: 992px) {
+  :root {
+    --app-header-h: 84px;       /* mobile/tablet */
+    --header-offset: var(--app-header-h);
+  }
+}
+
+/* =========================================================
+   Header background helpers per curs
+   ---------------------------------------------------------
+   Aceste clase se aplică pe cardul mare de titlu (Past Papers,
+   Questionbank etc.) ca să obținem gradientul consistent.
+   - border-radius / border vin direct de aici ca să nu trebuiască
+     să le repetăm la fiecare pagină.
+   - poți adăuga padding, shadow, text-color direct în componentă.
+   ========================================================= */
+
+.course-header-ai-sl {
+  background-image: linear-gradient(
+    to right,
+    var(--ai-sl-header-start),
+    var(--ai-sl-header-end)
+  );
+  border-radius: 1rem; /* ~16px, apropiat de rounded-2xl Tailwind */
+  border: 1px solid rgb(209 213 219 / 0.6); /* slate-300/60 */
+}
+
+.course-header-aa-sl {
+  background-image: linear-gradient(
+    to right,
+    var(--aa-sl-header-start),
+    var(--aa-sl-header-end)
+  );
+  border-radius: 1rem;
+  border: 1px solid rgb(209 213 219 / 0.6);
+}
+
+.course-header-aa-hl {
+  background-image: linear-gradient(
+    to right,
+    var(--aa-hl-header-start),
+    var(--aa-hl-header-end)
+  );
+  border-radius: 1rem;
+  border: 1px solid rgb(209 213 219 / 0.6);
+}
+
+.course-header-ai-hl {
+  background-image: linear-gradient(
+    to right,
+    var(--ai-hl-header-start),
+    var(--ai-hl-header-end)
+  );
+  border-radius: 1rem;
+  border: 1px solid rgb(209 213 219 / 0.6);
+}
+
+/* =========================================================
+   Bază (fără reset Tailwind — folosim Bootstrap)
+   ========================================================= */
+@layer base {
+  a { color: var(--ace-accent); text-decoration: none; }
+  a:hover, a:focus { color: var(--ace-accent-hover); text-decoration: none; }
+
+  a:focus,
+  button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #fff;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* offset stabil, setat încă din SSR */
+  padding-top: var(--header-offset) !important;
+}
+
+/* header fix: înălțimea include border-ul (box-sizing) */
+header.fixed-top {
+  height: var(--app-header-h);
+  box-sizing: border-box;
+}
+header.fixed-top .container {
+  height: 100%;
+  align-items: center;
+}
+
+input[type="radio"],
+input[type="checkbox"] { accent-color: var(--ink); }
+
+h1, h2, h3, h4, h5, h6,
+p, li, dt, dd, label, legend,
+th, td, caption { color: var(--ink); }
+
+header { z-index: 1000; }
+
+/* ============================
+   Dropdown personalizat
+   ============================ */
+.custom-dropdown-link {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+  padding: 6px 12px !important;
+  border-radius: 50px !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  background-color: transparent !important;
+  transition: background-color 0.2s ease !important;
+  cursor: pointer !important;
+}
+.custom-dropdown-link:hover,
+.custom-dropdown-link:focus,
+.custom-dropdown-link:active {
+  background-color: #f5f5f5 !important;
+  border-radius: 50px !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+/* ============================
+   Brandmark
+   ============================ */
+.brandmark-link { gap: .5rem; }
+.brandmark{
+  display: inline-flex;
+  align-items: baseline;
+  gap: .16rem;
+  color: var(--brand-text);
+  line-height: 1;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(24px, 2.4vw, 30px);
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  position: relative;
+}
+.brand-ace{ font-style: italic; font-weight: 800; letter-spacing: -0.015em; }
+.brand-ib{
+  display: inline-block;
+  padding: .02em .28em;
+  border-radius: 4px;
+  background: var(--brand-ib-bg);
+  color: #fff;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  font-weight: 800;
+  text-transform: uppercase;
+  position: relative;
+  top: -.02em;
+  margin: 0 .08em;
+}
+.brand-math{ font-weight: 800; letter-spacing: -0.02em; margin-left: .02em; }
+
+/* ============================
+   Badges
+   ============================ */
+.ent-badge{
+  display:inline-block; padding:0.2rem 0.6rem; border-radius:9999px;
+  font-size:0.8rem; font-weight:600; line-height:1; vertical-align:middle; user-select:none;
+}
+.badge-premium{ background: var(--brand-red); color:#fff; }
+.badge-free{ background:#0d6efd; color:#fff; }
+
+/* Variantă soft */
+.badge-premium-soft{
+  display:inline-flex; align-items:center;
+  border:1px solid #facc15; background:#fef9c3; color: var(--ink);
+  border-radius:9999px; padding:.22rem .65rem; font-size:.82rem; line-height:1;
+}
+
+/* ============================
+   „Playing card” helper
+   ============================ */
+.ace-card{
+  border-radius: 1.25rem; border: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 0 1px 2px rgba(2, 8, 23, .05);
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.ace-card:hover{ box-shadow: 0 8px 20px rgba(2, 8, 23, .10); transform: translateY(-2px); }
+.ace-card-icon{
+  width:56px; height:56px; display:flex; align-items:center; justify-content:center;
+  border-radius:.9rem; border:1px solid #e5e7eb; background:#f8fafc;
+}
+
+/* ===== Left rail helper ===== */
+@supports selector(body:has(.left-rail)) {
+  body:has(.left-rail)::before{
+    content:""; position: fixed; top: 0; left: 0;
+    width: var(--left-rail-w, 260px); height: var(--header-offset);
+    background: var(--voronet, var(--rail-blue)); z-index: 0; pointer-events: none;
+  }
+}
+
+/* ============================
+   Footer + sticky
+   ============================ */
+.site-footer {
+  background: #f3f4f6; color: #374151;
+  border-top: 1px solid #e5e7eb; padding: 32px 0;
+}
+.site-footer .footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 240px));
+  gap: 24px 48px; width: max-content; margin: 0 auto 20px; justify-items: start;
+}
+.site-footer .footer-list { list-style: none; padding: 0; margin: 0; }
+.site-footer .footer-list li { margin: 8px 0; font-weight: 400; color: #374151; line-height: 1.6; }
+.site-footer .footer-sep { border: 0; height: 1px; background: #cbd5e1; margin: 20px 0 16px; }
+.site-footer .footer-brand { text-align: center; padding-top: 4px; }
+.site-footer .footer-brand img { height: 48px; width: auto; display: block; margin: 0 auto 8px; mix-blend-mode: multiply; }
+.site-footer .copyright { text-align: center; color: #6b7280; font-size: 14px; margin-top: 2px; }
+@media (max-width: 992px) { .site-footer .footer-grid { grid-template-columns: repeat(2, minmax(180px, 240px)); } }
+@media (max-width: 576px) {
+  .site-footer .footer-grid { grid-template-columns: 1fr; width: auto; justify-items: center; }
+  .site-footer .footer-list li { text-align: center; }
+}
+
+main { min-height: calc(100vh - var(--app-header-h) - var(--footer-h) - var(--footer-gap)); }
+
+/* ============================
+   CourseLanding helpers (grid)
+   ============================ */
+.course-landing .cards-grid{ display:grid !important; grid-template-columns:1fr; gap:1.5rem; }
+@media (min-width:640px){ .course-landing .cards-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (min-width:1024px){ .course-landing .cards-grid{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (min-width:1280px){ .course-landing .cards-grid{ grid-template-columns:repeat(4,minmax(0,1fr)); } }
+
+@media (min-width:1280px){
+  .course-landing .center-2-of-4 > a:nth-child(1){ grid-column: 2; }
+  .course-landing .center-2-of-4 > a:nth-child(2){ grid-column: 3; }
+}
+.course-landing a, .course-landing a * { text-decoration: none !important; }
+
+/* ============================
+   MathLive peste tot
+   ============================ */
+.ML__keyboard, .ML__virtual-keyboard-toggle, .ML__popover { z-index: 2147483647 !important; }
+
+/* ============================
+   Breadcrumbs (global, reutilizabil)
+   ============================ */
+.breadcrumb { margin: 4px 0 12px; font-size: 14px; }
+.breadcrumb ul {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.breadcrumb a {
+  color: var(--crumb);
+  text-decoration: none;
+  font-weight: 500;
+}
+.breadcrumb a:hover { color: var(--crumb-hover); text-decoration: underline; }
+.breadcrumb .sep { opacity: .45; margin: 0 .25rem; }
+
+/* Scrollbar clar / vizibil pe coloana lecțiilor */
+.tl-scroll {
+  scrollbar-gutter: stable;
+  /* pentru Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent; /* thumb / track */
+}
+
+/* Chrome/Edge/Safari (WebKit) */
+.tl-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+.tl-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.tl-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;               /* slate-300 */
+  border-radius: 8px;
+}
+.tl-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;               /* slate-400 */
+}
+
+/* ——— Scrollbars consistente pentru coloanele SL și Lecții ——— */
+
+/* Firefox */
+.tl-scroll-sl,
+.tl-scroll-lessons {
+  scrollbar-width: thin;
+  scrollbar-color: #94a3b8 transparent;  /* slate-400 */
+  scrollbar-gutter: stable;
+}
+
+/* Chrome / Edge / Safari */
+.tl-scroll-sl::-webkit-scrollbar,
+.tl-scroll-lessons::-webkit-scrollbar {
+  width: 8px;
+}
+.tl-scroll-sl::-webkit-scrollbar-track,
+.tl-scroll-lessons::-webkit-scrollbar-track {
+  background: transparent;
+}
+.tl-scroll-sl::-webkit-scrollbar-thumb,
+.tl-scroll-lessons::-webkit-scrollbar-thumb {
+  background: #94a3b8;                   /* gri închis (slate-400) */
+  border-radius: 8px;
+}
+.tl-scroll-sl::-webkit-scrollbar-thumb:hover,
+.tl-scroll-lessons::-webkit-scrollbar-thumb:hover {
+  background: #64748b;                   /* și mai închis (slate-500) */
+}
+
+/* elimină marginile verticale implicite din tipografia .prose
+   ca textul să fie lipit de colțul de sus-stânga */
+.tl-prose-tight p,
+.tl-prose-tight ul,
+.tl-prose-tight ol,
+.tl-prose-tight li,
+.tl-prose-tight h1,
+.tl-prose-tight h2,
+.tl-prose-tight h3,
+.tl-prose-tight h4 {
+  margin-top: 0 !important;
+  margin-bottom: 0.25rem !important;
+}
+
+/* micșorează markerul și elimină marjele default din tipografia de listă */
+.tl-bullets {
+  list-style: disc;
+  padding-left: 1rem;
+  margin: 0;
+}
+/* marker finuț, ușor teal întunecat */
+.tl-bullets li::marker {
+  font-size: 0.6em;
+  color: #0f766e;
+}
+
+/* Buline mici, text mic și compact pentru conținutul SL */
+.sl-content { font-size: 10px; line-height: 1.25; color: #0f172a; } /* slate-900 */
+.sl-content ul.sl-bullets { margin: 0; padding-left: 1rem; list-style: disc; }
+.sl-content ul.sl-bullets > li { margin: 0.2rem 0; }
+
+/* Teacher Lessons — buton Open Lesson (default = AA SL teal) */
+.tl-open-btn {
+  border: 2px solid #0f766e;
+  color: #0f766e;
+  background: #ffffff;
+  border-radius: 9999px;
+  padding: 2px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.tl-open-btn:hover {
+  background: #0f766e;
+  color: #ffffff;
+  border-color: #0f766e;
+}
+
+.tl-open-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #0f766e1a, 0 0 0 4px #0f766e;
+}
+
+/* =========================================================
+   Teacher Lessons — variante color per curs
+   (aceste clase suprascriu stilul default .tl-open-btn
+   atunci când pagina este într-un wrapper de tip .course-theme-xxx)
+   ========================================================= */
+
+/* AA HL (mov închis / mov deschis)
+   folosim --aa-hl-dark = #7E22CE pentru contur și text
+   hover = fundal mov închis, text alb, border mov închis
+*/
+.course-theme-aa-hl .tl-open-btn {
+  border: 2px solid var(--aa-hl-dark);
+  color: var(--aa-hl-dark);
+  background: #ffffff;
+}
+.course-theme-aa-hl .tl-open-btn:hover {
+  background: var(--aa-hl-dark);
+  color: #ffffff;
+  border-color: var(--aa-hl-dark);
+}
+.course-theme-aa-hl .tl-open-btn:focus {
+  outline: none;
+  /* mic ring accesibil, dar în nuanță mov */
+  box-shadow: 0 0 0 2px rgb(126 34 206 / 0.1), 0 0 0 4px var(--aa-hl-dark);
+}
+
+/* AI SL (galben cald / portocaliu închis)
+   folosim --ai-sl-dark = #B45309 pentru contur, text, hover-fill
+*/
+.course-theme-ai-sl .tl-open-btn {
+  border: 2px solid var(--ai-sl-dark);
+  color: var(--ai-sl-dark);
+  background: #ffffff;
+}
+.course-theme-ai-sl .tl-open-btn:hover {
+  background: var(--ai-sl-dark);
+  color: #ffffff;
+  border-color: var(--ai-sl-dark);
+}
+.course-theme-ai-sl .tl-open-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(180 83 9 / 0.1), 0 0 0 4px var(--ai-sl-dark);
+}
+
+/* AI HL (mint/aqua pastel)
+   accent = --ai-hl-dark (#0F766E în paleta ta)
+   structură identică, doar altă variabilă
+*/
+.course-theme-ai-hl .tl-open-btn {
+  border: 2px solid var(--ai-hl-dark);
+  color: var(--ai-hl-dark);
+  background: #ffffff;
+}
+.course-theme-ai-hl .tl-open-btn:hover {
+  background: var(--ai-hl-dark);
+  color: #ffffff;
+  border-color: var(--ai-hl-dark);
+}
+.course-theme-ai-hl .tl-open-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(15 118 110 / 0.1), 0 0 0 4px var(--ai-hl-dark);
+}

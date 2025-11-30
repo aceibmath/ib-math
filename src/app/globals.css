@@ -1,0 +1,697 @@
+/* =========================================================
+   KaTeX (LaTeX)
+   ========================================================= */
+@import "katex/dist/katex.min.css";
+
+/* =========================================================
+   Bootstrap (global)
+   ========================================================= */
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+/* =========================================================
+   Tailwind v3
+   ========================================================= */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================
+   Variabile & culori globale
+   ========================================================= */
+:root{
+  /* ——— Header fix & stabil ——— */
+  --app-header-h: 96px;
+  --header-offset: var(--app-header-h);
+  --brand-ib-bg: #c92a2a;
+  --brand-text: #0f172a;
+  --brand-ib-bg1: #7A1F2A;
+
+  --ink: #0f3d37;
+  --warm-gray-50: #FAF9F7;
+  --brand-red: #c92a2a;
+  --tag-students: #10b981;
+  --tag-teachers: #c92a2a;
+  --grenat: #7A1F2A;
+
+  /* Link accent */
+  --ace-accent: #0284c7;
+  --ace-accent-hover: #075985;
+
+  /* Breadcrumb brand colour */
+  --crumb: #0f766e;
+  --crumb-hover: #0b6463;
+
+  /* Footer helpers */
+  --footer-h: 280px;
+  --footer-gap: 56px;
+  --rail-blue: #dbeafe;
+
+  /* =========================================================
+     Paleta oficială AceIBMath — Culori cursuri IB Mathematics
+     ========================================================= */
+
+  /* AA SL (verde-albastrui pastel) */
+  --aa-sl-light: #E0F2F1;
+  --aa-sl-dark:  #0F766E;
+
+  /* AA HL (mov pastel) */
+  --aa-hl-light: #F3E8FF;
+  --aa-hl-dark:  #7E22CE;
+
+  /* AI SL (galben cald pastel) */
+  --ai-sl-light: #FFF7ED;
+  --ai-sl-dark:  #B45309;
+
+  /* AI HL (aqua-mint pastel) */
+  --ai-hl-light: #E0F7F6;
+  --ai-hl-dark:  #0E7490;
+
+  /* Header gradients */
+  --ai-sl-header-start: #FFF7C2;
+  --ai-sl-header-end:   #FACC15;
+
+  --aa-sl-header-start: #E8F8ED;
+  --aa-sl-header-end:   #DFF4E7;
+
+  --aa-hl-header-start: #F4E8FF;
+  --aa-hl-header-end:   #EBD9FE;
+
+  --ai-hl-header-start: #E6FAF7;
+  --ai-hl-header-end:   #D9F3EF;
+
+  /* =========================================================
+     AceIBMath – Questionbank defaults (stil „Revision Village”)
+     ========================================================= */
+
+  /* text normal în cardurile de problemă */
+  --qb-text-font-size: 1.1rem;          /* text mare, de examen */
+  --qb-text-line-height: 1.6;
+  --qb-text-block-margin: 0.4rem;
+
+  /* math display (bloc) – aceeași mărime cu textul */
+  --qb-math-display-font-size: 1.1rem;
+  --qb-math-display-line-height: 1.9;
+  --qb-math-display-margin-top: 0.9rem;
+  --qb-math-display-margin-bottom: 1.1rem;
+
+  /* math inline */
+  --qb-math-inline-font-size: 1.1rem;
+  --qb-math-inline-line-height: 1.5;
+}
+
+/* =========================================================
+   THEME: AA HL (violet deschis / violet inchis / gri)
+   ========================================================= */
+.course-theme-aa-hl {
+  --accent-dark: #4C1D95;
+  --accent-mid:  #6D28D9;
+  --accent-bg:   #F3E8FF;
+  --neutral-bg:  #F5F7FA;
+  --neutral-text:#475569;
+  --accent-contrast: #ffffff;
+}
+
+@media (max-width: 992px) {
+  :root {
+    --app-header-h: 84px;
+    --header-offset: var(--app-header-h);
+    --fc-end-label: #0f172a;
+    --fc-end-link: var(--fc-end-label);
+  }
+}
+
+/* =========================================================
+   Header background helpers per curs
+   ========================================================= */
+.course-header-ai-sl {
+  background-image: linear-gradient(
+    to right,
+    var(--ai-sl-header-start),
+    var(--ai-sl-header-end)
+  );
+  border-radius: 1rem;
+  border: 1px solid rgb(209 213 219 / 0.6);
+}
+
+.course-header-aa-sl {
+  background-image: linear-gradient(
+    to right,
+    var(--aa-sl-header-start),
+    var(--aa-sl-header-end)
+  );
+  border-radius: 1rem;
+  border: 1px solid rgb(209 213 219 / 0.6);
+}
+
+.course-header-aa-hl {
+  background-image: linear-gradient(
+    to right,
+    var(--aa-hl-header-start),
+    var(--aa-hl-header-end)
+  );
+  border-radius: 1rem;
+  border: 1px solid rgb(209 213 219 / 0.6);
+}
+
+.course-header-ai-hl {
+  background-image: linear-gradient(
+    to right,
+    var(--ai-hl-header-start),
+    var(--ai-hl-header-end)
+  );
+  border-radius: 1rem;
+  border: 1px solid rgb(209 213 219 / 0.6);
+}
+
+/* =========================================================
+   Bază
+   ========================================================= */
+.header-mega a.mega-head,
+.header-mega a.mega-item {
+  color: #0f172a;
+  text-decoration: none;
+  transition: color 0.15s ease, text-decoration 0.15s ease;
+}
+
+.header-mega a.mega-head:hover,
+.header-mega a.mega-item:hover {
+  text-decoration: underline;
+  text-decoration-color: #0f172a;
+}
+
+body {
+  font-family: "Cambria", "Georgia", serif;
+  background-color: #fff;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding-top: var(--header-offset) !important;
+}
+
+header.fixed-top {
+  height: var(--app-header-h);
+  box-sizing: border-box;
+}
+header.fixed-top .container {
+  height: 100%;
+  align-items: center;
+}
+
+input[type="radio"],
+input[type="checkbox"] { accent-color: var(--ink); }
+
+h1, h2, h3, h4, h5, h6,
+p, li, dt, dd, label, legend,
+th, td, caption { color: var(--ink); }
+
+header { z-index: 1000; }
+
+/* ============================
+   Dropdown personalizat
+   ============================ */
+.custom-dropdown-link {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+  padding: 6px 12px !important;
+  border-radius: 50px !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  background-color: transparent !important;
+  transition: background-color 0.2s ease !important;
+  cursor: pointer !important;
+}
+.custom-dropdown-link:hover,
+.custom-dropdown-link:focus,
+.custom-dropdown-link:active {
+  background-color: #f5f5f5 !important;
+  border-radius: 50px !important;
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+/* ============================
+   Brandmark
+   ============================ */
+.brandmark-link { gap: .5rem; }
+.brandmark{
+  display: inline-flex;
+  align-items: baseline;
+  gap: .16rem;
+  color: var(--brand-text);
+  line-height: 1;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(24px, 2.4vw, 30px);
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  position: relative;
+}
+.brand-ace{ font-style: italic; font-weight: 800; letter-spacing: -0.015em; }
+.brand-ib{
+  display: inline-block;
+  padding: .02em .28em;
+  border-radius: 4px;
+  background: var(--brand-ib-bg);
+  color: #fff;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  font-weight: 800;
+  text-transform: uppercase;
+  position: relative;
+  top: -.02em;
+  margin: 0 .08em;
+}
+.brand-math{ font-weight: 800; letter-spacing: -0.02em; margin-left: .02em; }
+
+/* ============================
+   Badges
+   ============================ */
+.ent-badge{
+  display:inline-block; padding:0.2rem 0.6rem; border-radius:9999px;
+  font-size:0.8rem; font-weight:600; line-height:1; vertical-align:middle; user-select:none;
+}
+.badge-premium{ background: var(--brand-red); color:#fff; }
+.badge-free{ background:#0d6efd; color:#fff; }
+
+.badge-premium-soft{
+  display:inline-flex; align-items:center;
+  border:1px solid #facc15; background:#fef9c3; color: var(--ink);
+  border-radius:9999px; padding:.22rem .65rem; font-size:.82rem; line-height:1;
+}
+
+/* ============================
+   „Playing card” helper
+   ============================ */
+.ace-card{
+  border-radius: 1.25rem; border: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 0 1px 2px rgba(2, 8, 23, .05);
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.ace-card:hover{ box-shadow: 0 8px 20px rgba(2, 8, 23, .10); transform: translateY(-2px); }
+.ace-card-icon{
+  width:56px; height:56px; display:flex; align-items:center; justify-content:center;
+  border-radius:.9rem; border:1px solid #e5e7eb; background:#f8fafc;
+}
+
+/* ===== Left rail helper ===== */
+@supports selector(body:has(.left-rail)) {
+  body:has(.left-rail)::before{
+    content:""; position: fixed; top: 0; left: 0;
+    width: var(--left-rail-w, 260px); height: var(--header-offset);
+    background: var(--voronet, var(--rail-blue)); z-index: 0; pointer-events: none;
+  }
+}
+
+/* ============================
+   Footer + sticky
+   ============================ */
+.site-footer {
+  background: #f3f4f6; color: #374151;
+  border-top: 1px solid #e5e7eb; padding: 32px 0;
+}
+.site-footer .footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 240px));
+  gap: 24px 48px; width: max-content; margin: 0 auto 20px; justify-items: start;
+}
+.site-footer .footer-list { list-style: none; padding: 0; margin: 0; }
+.site-footer .footer-list li { margin: 8px 0; font-weight: 400; color: #374151; line-height: 1.6; }
+.site-footer .footer-sep { border: 0; height: 1px; background: #cbd5e1; margin: 20px 0 16px; }
+.site-footer .footer-brand { text-align: center; padding-top: 4px; }
+.site-footer .footer-brand img { height: 48px; width: auto; display: block; margin: 0 auto 8px; mix-blend-mode: multiply; }
+.site-footer .copyright { text-align: center; color: #6b7280; font-size: 14px; margin-top: 2px; }
+@media (max-width: 992px) { .site-footer .footer-grid { grid-template-columns: repeat(2, minmax(180px, 240px)); } }
+@media (max-width: 576px) {
+  .site-footer .footer-grid { grid-template-columns: 1fr; width: auto; justify-items: center; }
+  .site-footer .footer-list li { text-align: center; }
+}
+
+main { min-height: calc(100vh - var(--app-header-h) - var(--footer-h) - var(--footer-gap)); }
+
+/* ============================
+   CourseLanding helpers (grid)
+   ============================ */
+.course-landing .cards-grid{ display:grid !important; grid-template-columns:1fr; gap:1.5rem; }
+@media (min-width:640px){ .course-landing .cards-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (min-width:1024px){ .course-landing .cards-grid{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (min-width:1280px){ .course-landing .cards-grid{ grid-template-columns:repeat(4,minmax(0,1fr)); } }
+
+@media (min-width:1280px){
+  .course-landing .center-2-of-4 > a:nth-child(1){ grid-column: 2; }
+  .course-landing .center-2-of-4 > a:nth-child(2){ grid-column: 3; }
+}
+.course-landing a, .course-landing a * { text-decoration: none !important; }
+
+/* ============================
+   MathLive peste tot
+   ============================ */
+.ML__keyboard, .ML__virtual-keyboard-toggle, .ML__popover { z-index: 2147483647 !important; }
+
+/* ============================
+   Breadcrumbs
+   ============================ */
+.breadcrumb { margin: 4px 0 12px; font-size: 14px; }
+.breadcrumb ul {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.breadcrumb a {
+  color: var(--crumb);
+  text-decoration: none;
+  font-weight: 500;
+}
+.breadcrumb a:hover { color: var(--crumb-hover); text-decoration: underline; }
+.breadcrumb .sep { opacity: .45; margin: 0 .25rem; }
+
+/* Scrollbar clar / vizibil pe coloana lecțiilor */
+.tl-scroll {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+.tl-scroll::-webkit-scrollbar { width: 10px; }
+.tl-scroll::-webkit-scrollbar-track { background: transparent; }
+.tl-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+.tl-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+.tl-scroll-sl,
+.tl-scroll-lessons {
+  scrollbar-width: thin;
+  scrollbar-color: #94a3b8 transparent;
+}
+.tl-scroll-sl::-webkit-scrollbar,
+.tl-scroll-lessons::-webkit-scrollbar { width: 8px; }
+.tl-scroll-sl::-webkit-scrollbar-track,
+.tl-scroll-lessons::-webkit-scrollbar-track { background: transparent; }
+.tl-scroll-sl::-webkit-scrollbar-thumb,
+.tl-scroll-lessons::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 8px;
+}
+.tl-scroll-sl::-webkit-scrollbar-thumb:hover,
+.tl-scroll-lessons::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+.tl-prose-tight p,
+.tl-prose-tight ul,
+.tl-prose-tight ol,
+.tl-prose-tight li,
+.tl-prose-tight h1,
+.tl-prose-tight h2,
+.tl-prose-tight h3,
+.tl-prose-tight h4 {
+  margin-top: 0 !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.tl-bullets {
+  list-style: disc;
+  padding-left: 1rem;
+  margin: 0;
+}
+.tl-bullets li::marker {
+  font-size: 0.6em;
+  color: #0f766e;
+}
+
+.sl-content { font-size: 10px; line-height: 1.25; color: #0f172a; }
+.sl-content ul.sl-bullets { margin: 0; padding-left: 1rem; list-style: disc; }
+.sl-content ul.sl-bullets > li { margin: 0.2rem 0; }
+
+/* Teacher Lessons — buton Open Lesson */
+.tl-open-btn {
+  border: 2px solid #0f766e;
+  color: #0f766e;
+  background: #ffffff;
+  border-radius: 9999px;
+  padding: 2px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.tl-open-btn:hover {
+  background: #0f766e;
+  color: #ffffff;
+  border-color: #0f766e;
+}
+.tl-open-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #0f766e1a, 0 0 0 4px #0f766e;
+}
+
+/* Teacher Lessons — variante color per curs */
+.course-theme-aa-hl .tl-open-btn {
+  border: 2px solid var(--aa-hl-dark);
+  color: var(--aa-hl-dark);
+  background: #ffffff;
+}
+.course-theme-aa-hl .tl-open-btn:hover {
+  background: var(--aa-hl-dark);
+  color: #ffffff;
+  border-color: var(--aa-hl-dark);
+}
+.course-theme-aa-hl .tl-open-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(126 34 206 / 0.1), 0 0 0 4px var(--aa-hl-dark);
+}
+
+.course-theme-ai-sl .tl-open-btn {
+  border: 2px solid var(--ai-sl-dark);
+  color: var(--ai-sl-dark);
+  background: #ffffff;
+}
+.course-theme-ai-sl .tl-open-btn:hover {
+  background: var(--ai-sl-dark);
+  color: #ffffff;
+  border-color: var(--ai-sl-dark);
+}
+.course-theme-ai-sl .tl-open-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(180 83 9 / 0.1), 0 0 0 4px var(--ai-sl-dark);
+}
+
+.course-theme-ai-hl .tl-open-btn {
+  border: 2px solid var(--ai-hl-dark);
+  color: var(--ai-hl-dark);
+  background: #ffffff;
+}
+.course-theme-ai-hl .tl-open-btn:hover {
+  background: var(--ai-hl-dark);
+  color: #ffffff;
+  border-color: var(--ai-hl-dark);
+}
+.course-theme-ai-hl .tl-open-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(15 118 110 / 0.1), 0 0 0 4px var(--ai-hl-dark);
+}
+
+/* ===== Deck theming (ProblemPane) ===== */
+.course-theme-aa-sl {
+  --fc-header-bg: color-mix(in srgb, var(--aa-sl-light) 92%, white);
+  --fc-btn-border: var(--aa-sl-dark);
+  --fc-btn-text: var(--aa-sl-dark);
+  --fc-btn-bg: #ffffff;
+  --fc-btn-hover-bg: var(--aa-sl-dark);
+  --fc-btn-hover-border: var(--aa-sl-dark);
+  --fc-btn-hover-text: #ffffff;
+  --fc-vline: color-mix(in srgb, var(--aa-sl-dark) 20%, #e5e7eb);
+}
+
+.course-theme-ai-sl {
+  --ai-sl-chip-bg: #FFE8C2;
+  --fc-header-bg: var(--ai-sl-chip-bg);
+  --fc-submit-bg: var(--ai-sl-dark);
+  --fc-submit-border: var(--ai-sl-dark);
+  --fc-submit-text: #ffffff;
+  --fc-submit-hover-bg: color-mix(in srgb, var(--ai-sl-dark) 90%, black);
+  --fc-submit-hover-border: color-mix(in srgb, var(--ai-sl-dark) 90%, black);
+  --fc-submit-hover-text: #ffffff;
+  --fc-btn-border: var(--ai-sl-dark);
+  --fc-btn-text: var(--ai-sl-dark);
+  --fc-btn-bg: #ffffff;
+  --fc-btn-hover-bg: var(--ai-sl-dark);
+  --fc-btn-hover-border: var(--ai-sl-dark);
+  --fc-btn-hover-text: #ffffff;
+  --fc-vline: color-mix(in srgb, var(--ai-sl-dark) 22%, #e5e7eb);
+}
+
+.course-theme-ai-hl {
+  --ai-hl-chip-bg: #D7F2FF;
+  --fc-header-bg: var(--ai-hl-chip-bg);
+  --fc-submit-bg: var(--ai-hl-dark);
+  --fc-submit-border: var(--ai-hl-dark);
+  --fc-submit-text: #ffffff;
+  --fc-submit-hover-bg: color-mix(in srgb, var(--ai-hl-dark) 90%, black);
+  --fc-submit-hover-border: color-mix(in srgb, var(--ai-hl-dark) 90%, black);
+  --fc-submit-hover-text: #ffffff;
+  --fc-btn-border: var(--ai-hl-dark);
+  --fc-btn-text: var(--ai-hl-dark);
+  --fc-btn-bg: #ffffff;
+  --fc-btn-hover-bg: var(--ai-hl-dark);
+  --fc-btn-hover-border: var(--ai-hl-dark);
+  --fc-btn-hover-text: #ffffff;
+  --fc-vline: color-mix(in srgb, var(--ai-hl-dark) 18%, #e5e7eb);
+}
+
+.course-theme-aa-hl {
+  --fc-header-bg: color-mix(in srgb, var(--aa-hl-light) 92%, white);
+  --fc-submit-bg: var(--aa-hl-dark);
+  --fc-submit-border: var(--aa-hl-dark);
+  --fc-submit-text: #ffffff;
+  --fc-submit-hover-bg: color-mix(in srgb, var(--aa-hl-dark) 90%, black);
+  --fc-submit-hover-border: color-mix(in srgb, var(--aa-hl-dark) 90%, black);
+  --fc-submit-hover-text: #ffffff;
+  --fc-btn-border: var(--aa-hl-dark);
+  --fc-btn-text: var(--aa-hl-dark);
+  --fc-btn-bg: #ffffff;
+  --fc-btn-hover-bg: var(--aa-hl-dark);
+  --fc-btn-hover-border: var(--aa-hl-dark);
+  --fc-btn-hover-text: #ffffff;
+  --fc-vline: color-mix(in srgb, var(--aa-hl-dark) 18%, #e5e7eb);
+}
+
+/* Kill underline pentru butoane */
+a.btn,
+a[class*="btn-"],
+.btn,
+.btn:hover,
+.btn:focus,
+.btn:active {
+  text-decoration: none !important;
+}
+.btn * { text-decoration: none !important; }
+a[role="button"] { text-decoration: none !important; }
+
+/* Ascunde cutia Duration (months) */
+.membership-page .months-box[hidden] {
+  display: none !important;
+}
+
+/* =========================================================
+   AceIBMath – Questionbank: text + KaTeX
+   ========================================================= */
+
+/* Question row + marks */
+.q {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0 0 0.35rem;
+}
+.q-text { flex: 1; }
+.q .marks {
+  display: inline-block;
+  font-size: var(--qb-text-font-size);
+  color: #0f3d37;
+  white-space: nowrap;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* MdMath container – bază (se reglează fin în questionbank.module.css) */
+.ace-md {
+  font-size: var(--qb-text-font-size);
+  line-height: var(--qb-text-line-height);
+  color: #0f172a;
+  text-align: left;
+}
+.ace-md p {
+  margin: 0 0 var(--qb-text-block-margin);
+  font-size: inherit;
+  line-height: inherit;
+}
+.ace-md ul,
+.ace-md ol {
+  margin: 0 0 var(--qb-text-block-margin) 1.2rem;
+  padding: 0;
+}
+.ace-md li {
+  margin: 0.15rem 0;
+}
+
+/* KaTeX – display math (bloc) – centrat și cu spațiu vertical */
+.ace-md .katex-display {
+  text-align: center !important;
+  margin-top: var(--qb-math-display-margin-top);
+  margin-bottom: var(--qb-math-display-margin-bottom);
+  display: block !important;
+  width: 100%;
+}
+.ace-md .katex-display > .katex {
+  font-size: 1em; /* aceeași înălțime de bază ca textul */
+  line-height: var(--qb-math-display-line-height);
+}
+
+/* KaTeX – inline */
+.ace-md .katex {
+  font-size: 1em !important;  /* aproape identic cu textul */
+  line-height: var(--qb-math-inline-line-height) !important;
+}
+
+/* Spațiu extra între rânduri în aligned / multiline */
+.ace-md .katex-display .base {
+  line-height: 2.05 !important;
+  padding-top: 0.22rem !important;
+  padding-bottom: 0.22rem !important;
+}
+
+/* Questionbank – centrare șiruri (sequence line) */
+.qb-seq-center {
+  text-align: center;
+  margin: 0 0 var(--qb-text-block-margin);
+}
+.qb-seq-center span {
+  display: inline-block;
+}
+
+/* Highlights */
+.hl-green {
+  background: #d9fdd3;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.35rem;
+  display: inline-block;
+}
+.hl-yellow {
+  background: #fff6bf;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.35rem;
+  display: inline-block;
+}
+.hl-blue {
+  background: #dbeafe;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.4rem;
+  display: inline-block;
+}
+
+.ace-hl-math {
+  background: #fff59d;
+  padding: 0 0.15em;
+  border-radius: 4px;
+}
+.ace-hl-math-box {
+  background: #e8f5e9;
+  padding: 0.15em 0.4em;
+  border-radius: 6px;
+  border: 1px solid #2e7d32;
+}
+
+/* Family pentru operatori relaționali / binari (KaTeX) */
+.katex .mrel {
+  font-family: "KaTeX_Main";
+}
+.katex .mbin {
+  font-family: "KaTeX_Main";
+}

@@ -1,0 +1,498 @@
+/* src/app/(content)/AA_SL/questionbank/questionbank.module.css */
+
+/*
+AA SL palette (din globals):
+  --aa-sl-light: #E0F2F1;   fundal deschis (pastel teal)
+  --aa-sl-dark:  #0F766E;   accent închis (teal închis)
+*/
+
+/* card scrolled sub header */
+.rowWrap {
+  scroll-margin-top: calc(var(--app-header-h, 72px) + 5px);
+}
+
+/* ===== Card ===== */
+.rowCard {
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 12px;
+  background: #fff;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: border .2s ease, box-shadow .2s ease;
+}
+
+/* când cardul e activ (ai deschis Mark Scheme etc.) accentuăm cu teal închis */
+.rowCardActive {
+  border: 2px solid #0F766E; /* var(--aa-sl-dark) */
+  box-shadow: 0 10px 26px rgba(0,0,0,.06);
+}
+
+
+
+
+.cardActive {
+  margin-top: 5px;
+  padding-bottom: 10px !important;
+}
+
+
+/* ===== Header ===== */
+.cardHeader {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+
+  /* fundal pastel AA SL */
+  background: #E0F2F1; /* var(--aa-sl-light) */
+  border-bottom: 1px solid rgba(15,118,110,0.25);
+  padding: 8px 12px;
+}
+
+.headerLeft  {
+  display: flex;
+  gap: 30px;              /* Question + iconuri info */
+  align-items: center;
+}
+.headerCenter{
+  justify-self: center;
+  display: flex;
+  align-items: center;
+}
+.headerRight {
+  justify-self: end;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* titlul "Question 1" în teal închis */
+.qNumber {
+  font-weight: 700;
+  color: #0F766E; /* var(--aa-sl-dark) */
+  font-size: 1rem;
+}
+
+/* badge "Maximum mark" dacă îl folosim separat (momentan nu) */
+.maxBadge {
+  font-size: 0.8rem;
+  color: #374151;
+  background: #ffffff;
+  border: 1px solid rgba(15,118,110,0.25);
+  border-radius: 8px;
+  padding: 2px 8px;
+}
+
+/* textul [Maximum Mark: 4] lângă Question 1 */
+.maxMark {
+  margin-left: 0.5rem;
+  font-size: 1em;
+  font-weight: 400;
+  color: inherit;
+}
+
+/* ===== Iconițe – stil nou, fără chenar ===== */
+
+/* iconuri informative (Calc, Difficulty) – în stânga, doar info */
+.metaInfoIcon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 2px;
+  color: #0F766E;
+  font-size: 0.9rem;
+  cursor: default;
+}
+
+/* iconuri active (Eye, FB, Tutor) – în dreapta, butoane minimaliste */
+.metaIconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #0F766E;
+  cursor: pointer;
+}
+
+.metaIconBtn:hover {
+  background: rgba(15,118,110,0.12);
+}
+
+/* Buton cu text pentru Tutor IA (stil "pill") */
+.tutorBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 1px solid #0F766E;  /* var(--aa-sl-dark) */
+  background: #ffffff;
+  color: #0F766E;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.tutorBtn:hover {
+  background: #0F766E;        /* var(--aa-sl-dark) */
+  color: #ffffff;
+}
+
+/* iconul din butonul Tutor IA – rămâne 30px ca restul (deși acum nu-l mai folosim) */
+.tutorIcon {
+  width: 30px;
+  height: 30px;
+}
+
+/* ===== MĂRIMI ICONURI ===== */
+
+/* calculator (stânga) – îl lăsăm 30px */
+.metaIconCalc {
+  width: 25px;
+  height: 25px;
+}
+
+/* iconuri din dreapta: Eye + Formula Booklet – le poți mări separat */
+.metaIconRight {
+  width: 25px;
+  height: 25px;
+}
+
+/* (OPTIONAL) dacă mai folosești .metaIcon în altă parte, o poți lăsa așa: */
+.metaIcon {
+  width: 30px;
+  height: 30px;
+}
+
+/* doar steluțele de la difficulty */
+.metaIconSmall {
+  width: 20px;
+  height: 20px;
+}
+
+/* grupul de 3 steluțe, foarte apropiate */
+.starsGroup {
+  display: inline-flex;
+  gap: 0px;
+}
+
+/* label (Easy / Medium / Hard) – la fel ca Maximum Mark */
+.metaLabel {
+  line-height: 1;
+  font-size: 1em;
+  font-weight: 500;
+  color: inherit;
+}
+
+/* status (ex. Tutor IA on/off) */
+.metaOn  { opacity: 1; }
+.metaOff { opacity: .35; }
+
+/* ===== Buton central "Mark Scheme" ===== */
+.markBtnCenter {
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 1px solid #0F766E; /* var(--aa-sl-dark) */
+  background: #fff;
+  color: #0F766E;
+  font-weight: 500;
+  font-size: 0.9rem;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.markBtnCenter:hover {
+  background: #0F766E;
+  color: #fff;
+}
+
+/* Grupul cu săgeți + X */
+.centerControls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.arrowBtn {
+  width: 40px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #0F766E;
+  background: #fff;
+  color: #0F766E;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.arrowBtn:hover {
+  background: #0F766E;
+  color: #fff;
+}
+
+.arrowDisabled {
+  opacity: .35;
+  cursor: not-allowed;
+  border-color: rgba(15,118,110,0.35);
+}
+
+.arrowDisabled:hover {
+  background: #fff;
+  color: #0F766E;
+}
+
+.closeBtn {
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.closeBtn:hover {
+  color: #111827;
+}
+
+/* ===== Body ===== */
+.rowBodyContainer {
+  position: relative;
+}
+
+/* Full-width (enunț SAU MS) — cardul rămâne în viewport și are scroll intern */
+.colOnly {
+  padding: 12px;
+  overflow-x: hidden;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.colOnly .markBody,
+.colOnly .rowStmt {
+  overflow-x: hidden;
+}
+
+/* Asigură ruperea textului pe rânduri (fără tăieri) */
+.rowStmt,
+.markBody {
+  overflow-wrap: anywhere;
+  word-break: normal;
+  white-space: normal;
+  line-height: 1.35;
+  color: #0f172a;
+}
+
+/* Split 50/50 – DINAMIC (se micșorează când conținutul e scurt) */
+.rowBodySplit {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  min-height: auto;
+  height: auto;
+}
+
+.colSide {
+  width: 50%;
+  padding: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 70vh;
+}
+
+/* separator */
+.verticalLine {
+  width: 1px;
+  background: rgba(0,0,0,0.15);
+  align-self: stretch;
+}
+
+/* ===== Tipografie Questionbank – Cambria, stil RV ===== */
+
+/* FULL view (colOnly, plus preview modal) – text mare, serif */
+.rowStmt .ace-md,
+.rowStmt .ace-md p,
+.rowStmt .ace-md span,
+.rowStmt .ace-md li,
+.markBody .ace-md,
+.markBody .ace-md p,
+.markBody .ace-md span,
+.markBody .ace-md li {
+  font-size: var(--qb-text-font-size);
+  line-height: var(--qb-text-line-height);
+  font-family: "Cambria", "Georgia", serif;
+}
+
+/* KaTeX în carduri – serif elegant, mărime apropiată de text */
+.rowStmt .ace-md .katex,
+.markBody .ace-md .katex {
+  font-size: 1em !important;
+  font-family: "KaTeX_Main", "Cambria", "Georgia", serif !important;
+}
+
+/* SPLIT 50/50 (mode 1) – totul ușor mai mic (aprox = ce ai acum la enunț) */
+.splitScale .ace-md,
+.splitScale .ace-md p,
+.splitScale .ace-md span,
+.splitScale .ace-md li {
+  font-size: calc(var(--qb-text-font-size) * 0.92) !important;
+  line-height: 1.45 !important;
+}
+
+/* și formulele în split la aceeași scară ca textul */
+.splitScale .ace-md .katex {
+  font-size: 1em !important;
+}
+
+/* Display să nu declanșeze orizontal */
+.colSide .katex-display {
+  margin: 0.75rem 0;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* responsive */
+@media (max-width: 1024px) {
+  .colSide {
+    max-height: 60vh;
+  }
+}
+
+/* ===== Modal – Question preview (RV-style) ===== */
+
+.qbModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+}
+
+.qbModal {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.35);
+  max-width: 720px;
+  width: min(720px, 94vw);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  /* împinge modalul mai jos sub header */
+  margin-top: 80px;
+}
+
+/* ─── DOAR pentru Formula Booklet: variantă mai lată (1200px) ─── */
+.qbModalFb {
+  max-width: 1200px;
+  width: min(1200px, 96vw);
+}
+
+.qbModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  font-weight: 600;
+  font-size: 0.96rem;
+  color: #0f172a;
+}
+
+.qbModalClose {
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.qbModalClose:hover {
+  color: #0f172a;
+}
+
+.qbModalBody {
+  padding: 0.9rem 1.1rem 1rem;
+  overflow-y: auto;
+}
+
+/* vechiul buton text "View question" – nu-l mai folosim dar îl păstrăm în caz de nevoie */
+.qbPreviewBtn {
+  border: 1px solid rgba(15,118,110,0.4);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  background: #ffffff;
+  cursor: pointer;
+  color: #0F766E;
+}
+
+.qbPreviewBtn:hover {
+  background: #dbeafe;
+}
+
+
+.q {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+}
+
+.q-text {
+  flex: 1 1 auto;
+}
+
+.marks {
+  flex: 0 0 auto;
+  margin-left: 0.5rem;
+  font-weight: 600;
+}
+
+.math-inline {
+  font-family: "KaTeX_Main", Cambria, "Times New Roman", serif;
+  font-style: italic;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.closeTextBtn {
+  width: auto;
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 8px;
+  border: 1px solid #0F766E;
+  background: #fff;
+  color: #0F766E;
+  font-weight: 500;
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.closeTextBtn:hover {
+  background: #0F766E;
+  color: #fff;
+}

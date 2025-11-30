@@ -1,0 +1,143 @@
+﻿/* src/app/(content)/AA_SL/page.module.css */
+
+/* AA_SL page.module.css */
+
+.pageBg {
+  /* page background (greenish, a touch lighter than before) */
+  background: #ffffff;
+  min-height: calc(100vh - var(--header-offset));
+}
+
+/* hero (title + description) — lighter than page bg, rounded + soft green shadow */
+.hero {
+  background: #eaf7f1; /* lighter + more green than the page bg */
+  border-radius: 16px;
+  box-shadow:
+    0 10px 26px rgba(16, 94, 79, 0.10),
+    0 2px 6px rgba(16, 94, 79, 0.06);
+  border: 1px solid rgba(16, 94, 79, 0.10);
+}
+
+/* container 1200px wide for both hero and cards */
+.wrap1200 {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;   /* 16px */
+  padding-right: 1rem;  /* 16px */
+}
+
+/* rows with 3 cards, second row 25px below first; horizontal space is automatic */
+.rows {
+
+
+  margin-top: 25px;             /* 25px space below the hero */
+  display: grid;
+  grid-template-columns: repeat(3, 357px);
+  row-gap: 25px;
+  column-gap: 0;                /* we’ll let cards shrink widths and auto space with justify */
+  justify-content: space-between;
+}
+
+
+
+/* single card */
+.card {
+  width: 357px;                 /* 381 - 24 */
+  height: 236px;                /* 254 - 18 */
+  border-radius: 22px;
+  background: #ffffff;
+  border: 1px solid rgba(2, 8, 23, 0.06);
+  box-shadow:
+    0 8px 18px rgba(2, 8, 23, 0.06),
+    0 2px 6px rgba(2, 8, 23, 0.04);
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+  will-change: transform, box-shadow;
+}
+
+/* inner layout to keep title vertically balanced between top badges and bottom */
+.cardInner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 20px 12px;
+}
+
+/* top row: icon box + tags */
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+/* icon badge (white+ink border) */
+.badge {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: #fff;
+  border: 2px solid #0f3d37;         /* ink */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(2, 8, 23, 0.08);
+}
+
+/* tags block */
+.tags {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 6px;
+}
+.tag {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+  color: #ef4444; /* red */
+}
+
+/* title, sits toward the middle-bottom with extra space above
+   — updated per request: 40px and weight 600 everywhere */
+.title {
+  margin-top: auto;  /* pushes title down to balance space with top area */
+  font-weight: 600;
+  font-size: 40px;
+  color: #0f3d37;    /* ink (greenish-blue) */
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-decoration: none !important;
+}
+
+/* keep both helpers aligned to the same spec */
+.titleLg { font-size: 40px; font-weight: 600; }
+.titleMd { font-size: 40px; font-weight: 600; }
+
+/* hover / active 3D feel */
+.card:hover {
+  transform: translateY(-6px) scale(1.01) rotateX(1deg) rotateY(0.6deg);
+  box-shadow:
+    0 16px 36px rgba(2, 8, 23, 0.10),
+    0 6px 14px rgba(2, 8, 23, 0.06);
+  filter: saturate(1.03);
+}
+.card:active {
+  animation: card-shake 180ms ease-in-out;
+  transform: translateY(-2px) scale(0.99);
+}
+@keyframes card-shake {
+  0%   { transform: translateY(-2px) rotateZ(0deg); }
+  25%  { transform: translateY(-2px) rotateZ(0.6deg); }
+  50%  { transform: translateY(-2px) rotateZ(-0.6deg); }
+  75%  { transform: translateY(-2px) rotateZ(0.4deg); }
+  100% { transform: translateY(-2px) rotateZ(0deg); }
+}
+
+/* never underline anything inside the card grid */
+.rows * { text-decoration: none !important; }
+
+/* a bit of extra breathing room below the second row so bg doesn’t end abruptly */
+.bottomPad {
+  padding-bottom: 50px;
+}

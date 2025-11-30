@@ -1,0 +1,52 @@
+/* --------------------------------------------------
+   IB Math Platform — Theme Colors per Course
+    -------------------------------------------------- */
+
+/* === GLOBAL neutral colors === */
+:root {
+  --gray-light: #f8fafc;
+  --gray-mid: #e2e8f0;
+  --gray-text: #94a3b8;
+}
+
+/* === MATH AA SL === */
+:root[data-course="aa-sl"] {
+  --color-light: #ccf0ea;
+  --color-dark: #0f766e;
+}
+
+/* === MATH AA HL === */
+:root[data-course="aa-hl"] {
+  --color-light: #ede9fe;
+  --color-dark: #6d28d9;
+}
+
+/* === MATH AI SL === */
+:root[data-course="ai-sl"] {
+  --color-light: #fef9c3;
+  --color-dark: #d97706;
+}
+
+/* === MATH AI HL === */
+:root[data-course="ai-hl"] {
+  --color-light: #d9f5f0;
+  --color-dark: #0f766e;
+}
+
+/* === Shared utility classes (optional) === */
+.theme-bg-light { background-color: var(--color-light); }
+.theme-bg-dark { background-color: var(--color-dark); color: white; }
+.theme-border { border: 1px solid var(--color-dark); }
+.theme-text { color: var(--color-dark); }
+.theme-btn {
+  background-color: var(--color-dark);
+  color: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
+}
+.theme-btn:hover {
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  border: 1px solid var(--color-dark);
+}
